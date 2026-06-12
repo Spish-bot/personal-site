@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #fbfaf8;
+  color: #1d1d1b;
+  font-feature-settings: "kern";
+  letter-spacing: 0;
+}
+
+::selection {
+  background: #ded9cf;
+}
+
+a {
+  text-underline-offset: 4px;
+}
+
+figcaption {
+  color: #6f6d68;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.content-text {
+  color: #3f3d39;
+  font-size: 1.0625rem;
+  line-height: 1.95;
+}

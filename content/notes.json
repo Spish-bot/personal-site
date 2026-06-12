@@ -1,0 +1,47 @@
+[
+  {
+    "slug": "first-note",
+    "title": "First Note",
+    "date": "2026-06-12",
+    "summary": "A short beginning for this quiet room on the web.",
+    "tags": ["journal", "beginning"],
+    "published": true,
+    "modules": [
+      {
+        "kind": "paragraph",
+        "text": "这里是一篇生活随想示例。它可以很短，也可以很长；可以是一段观察、一张照片之后的说明，或某个未完成想法的保存。"
+      },
+      {
+        "kind": "divider"
+      },
+      {
+        "kind": "quote",
+        "text": "Not every note needs to become an essay."
+      },
+      {
+        "kind": "paragraph",
+        "text": "你可以直接复制这个对象，修改 slug、标题、日期和正文模块，创建新的随想。"
+      }
+    ]
+  },
+  {
+    "slug": "window-light",
+    "title": "Window Light",
+    "date": "2026-05-18",
+    "summary": "A small record of light moving across a wall.",
+    "tags": ["image", "daily"],
+    "published": true,
+    "modules": [
+      {
+        "kind": "image",
+        "src": "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=1200&auto=format&fit=crop",
+        "alt": "Quiet desk and window",
+        "caption": "图片随想示例。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "有些记录不需要结论，只需要保留当时的光线和一点点注意力。"
+      }
+    ]
+  }
+]
