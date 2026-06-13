@@ -16,6 +16,7 @@
 
 ```json
 { "kind": "paragraph", "text": "一段正文。" }
+{ "kind": "poem", "text": "第一行\n第二行\n\n第二段第一行" }
 { "kind": "image", "src": "https://...", "alt": "图片描述", "caption": "可选说明" }
 { "kind": "gallery", "images": [{ "src": "https://...", "alt": "图片描述" }] }
 { "kind": "video", "url": "https://www.youtube.com/embed/...", "caption": "可选说明" }

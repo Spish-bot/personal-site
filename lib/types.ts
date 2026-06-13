@@ -14,6 +14,10 @@ export type ContentModule =
       kind: "paragraph";
       text: string;
     }
+  | {
+      kind: "poem";
+      text: string;
+    }
   | ImageModule
   | {
       kind: "gallery";

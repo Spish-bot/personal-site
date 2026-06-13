@@ -1,91 +1,31 @@
 [
   {
-    "slug": "room-without-window",
-    "title": "Room Without Window",
+    "slug": "crow-poem",
+    "title": "鸦",
     "year": "2026",
-    "type": ["AI Video", "Film"],
-    "summary": "A short moving-image experiment about artificial rooms and remembered weather.",
-    "cover": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop",
+    "type": ["Writing", "Poetry"],
+    "summary": "一首关于风、黑夜、时间切片与乌鸦的现代诗。",
+    "cover": "/images/works/crow-fukase-ravens-reference.jpg",
     "published": true,
     "modules": [
       {
-        "kind": "paragraph",
-        "text": "这是一个影像实验的示例页面。你可以在这里写项目的背景、方法、动机，或者只留下几段安静的说明。"
+        "kind": "poem",
+        "text": "飞越宇宙与它的过往\n我的喙和羽毛整合于时间此刻的切片\n作为一只伫立枝头的乌鸦\n\n于是风把黑夜从四面八方吹来\n乌压压落满一颗大树\n我们各自作为一只伫立枝头的乌鸦\n不再言说 凝结于时间的此刻片段\n\n一直到风再一次吹起\n吹起枝头的乌鸦\n也吹起黑夜、大雪和路途\n它们纷纷扬扬地飘起 交错于乌鸦所穿行的介质\n\n等风吹起几次\n等乌鸦起降几次 几棵树\n我们再次作为一只乌鸦 伫立于彼刻的枝头\n一直到风再一次吹起"
       },
       {
         "kind": "image",
-        "src": "https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1400&auto=format&fit=crop",
-        "alt": "Architectural light and shadows",
-        "caption": "单张图片模块。"
-      },
-      {
-        "kind": "quote",
-        "text": "A room can be a memory before it becomes a place."
-      },
-      {
-        "kind": "video",
-        "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        "caption": "视频模块示例：替换为 YouTube 或 Vimeo 的嵌入链接。"
-      },
-      {
-        "kind": "note",
-        "title": "Creation Note",
-        "text": "创作说明可以记录素材来源、制作过程、未完成的想法，或项目之后仍在延伸的问题。"
+        "src": "/images/works/crow-fukase-ravens-reference.jpg",
+        "alt": "A black-and-white crow image referencing Masahisa Fukase's Ravens",
+        "caption": "图像索引：深濑昌久（Masahisa Fukase）《鸦 / Ravens》。"
       },
       {
         "kind": "links",
         "items": [
           {
-            "label": "External link",
-            "href": "https://example.com"
+            "label": "Masahisa Fukase / Wikipedia",
+            "href": "https://en.wikipedia.org/wiki/Masahisa_Fukase"
           }
         ]
-      }
-    ]
-  },
-  {
-    "slug": "small-city-archive",
-    "title": "Small City Archive",
-    "year": "2025",
-    "type": ["Photography", "Writing"],
-    "summary": "Photographs and short fragments from ordinary streets, collected without a fixed route.",
-    "cover": "https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1200&auto=format&fit=crop",
-    "published": true,
-    "modules": [
-      {
-        "kind": "paragraph",
-        "text": "这是一个摄影与短文本项目的示例。详情页可以混合图片组、短句、引用和项目说明。"
-      },
-      {
-        "kind": "gallery",
-        "images": [
-          {
-            "src": "https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1200&auto=format&fit=crop",
-            "alt": "Quiet exterior wall"
-          },
-          {
-            "src": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop",
-            "alt": "Muted landscape"
-          }
-        ]
-      },
-      {
-        "kind": "paragraph",
-        "text": "图片组不会在首页堆砌，只在作品详情中以克制的方式展开。"
-      }
-    ]
-  },
-  {
-    "slug": "sleeping-map",
-    "title": "Sleeping Map",
-    "year": "2024",
-    "type": ["Game Concept", "Writing"],
-    "summary": "A world-building notebook for a game about maps that change while people sleep.",
-    "published": false,
-    "modules": [
-      {
-        "kind": "paragraph",
-        "text": "这个条目设置为 published: false，不会出现在前台页面。你可以用它作为草稿示例。"
       }
     ]
   }

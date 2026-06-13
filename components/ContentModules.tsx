@@ -15,6 +15,12 @@ export function ContentModules({ modules }: ContentModulesProps) {
                 {module.text}
               </p>
             );
+          case "poem":
+            return (
+              <div key={index} className="whitespace-pre-line font-serif text-xl leading-loose text-ink md:text-2xl">
+                {module.text}
+              </div>
+            );
           case "image":
             return (
               <figure key={index} className="space-y-3">
