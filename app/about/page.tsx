@@ -29,7 +29,7 @@ export default function AboutPage() {
           <div className="space-y-8">
             {about.images.map((image) => (
               <figure key={image.src} className="space-y-3">
-                <img src={image.src} alt={image.alt} className="max-h-[520px] w-full object-cover" />
+                <img src={image.src} alt={image.alt} className="max-h-[560px] w-full object-cover object-[48%_38%]" />
                 {image.caption ? <figcaption>{image.caption}</figcaption> : null}
               </figure>
             ))}

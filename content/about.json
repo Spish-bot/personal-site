@@ -1,21 +1,21 @@
 {
-  "name": "Your Name",
+  "name": "Spish",
   "description": "Images, notes, and quiet experiments.",
   "intro": [
-    "这里写一段自然的个人介绍。不需要像简历，也不需要过度解释，只要说明你是谁、你最近关注什么、你正在慢慢做些什么。",
-    "你可以把这里当作一个长期可更新的作者档案：保留开放性，允许它随着作品、生活、兴趣变化。"
+    "Hey",
+    "个人网站缓慢搭建中..."
   ],
   "images": [
     {
-      "src": "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=1200&auto=format&fit=crop",
-      "alt": "A quiet desk near a window",
-      "caption": "示例图片：可替换为你的个人照片、工作台、空间或任何克制的图像。"
+      "src": "/images/spish-dog-portrait.jpg",
+      "alt": "Spish virtual dog persona portrait",
+      "caption": "这是我给自己搓的虚拟形象，我觉得我确实像一只狗，在狗里面最像的，大概就是长毛德牧吧！"
     }
   ],
   "links": [
     {
       "label": "Email",
-      "href": "mailto:you@example.com"
+      "href": "15618259362@163.com"
     },
     {
       "label": "Instagram",
