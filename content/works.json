@@ -1,9 +1,66 @@
 [
   {
+    "slug": "street-photography",
+    "title": "街头摄影",
+    "subtitle": "决定性瞬间",
+    "year": "2026-",
+    "type": [
+      "Photography",
+      "Street"
+    ],
+    "summary": "一个长期存放偶然街头照片的杂图站。以年份为记录模块，不追求完整项目，只保留路上碰到的瞬间。",
+    "cover": "/images/works/street-photography/2026/01-lamp-blossoms.JPG",
+    "published": true,
+    "modules": [
+      {
+        "kind": "paragraph",
+        "text": "这里会存放一些偶尔拍到的街头照片。它不一定构成完整的摄影项目，更像一个按年份缓慢增长的图像抽屉。"
+      },
+      {
+        "kind": "yearGallery",
+        "year": "2026",
+        "note": "这一年的街头照片可以陆续放在这里。",
+        "images": [
+          {
+            "src": "/images/works/street-photography/2026/01-lamp-blossoms.JPG",
+            "alt": "Night lamp and red blossoms in soft focus"
+          },
+          {
+            "src": "/images/works/street-photography/2026/02-snow-night-road.JPG",
+            "alt": "Black-and-white snowy road with parked bikes and city lights"
+          },
+          {
+            "src": "/images/works/street-photography/2026/03-rocky-shore.JPG",
+            "alt": "Person working among rocks by the sea"
+          },
+          {
+            "src": "/images/works/street-photography/2026/04-blue-sign.JPG",
+            "alt": "Blue sky, sign, utility pole, and overhead wires"
+          },
+          {
+            "src": "/images/works/street-photography/2026/05-guard-booth.JPG",
+            "alt": "Black-and-white guard booth beside a wall and scattered trash"
+          },
+          {
+            "src": "/images/works/street-photography/2026/06-winter-trash.JPG",
+            "alt": "Black-and-white winter street scene with trash and pedestrians"
+          },
+          {
+            "src": "/images/works/street-photography/2026/07-snow-lamp.jpg",
+            "alt": "Black-and-white snow passing through a bright street lamp"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "crow-poem",
     "title": "鸦",
     "year": "2026",
-    "type": ["Writing", "Poetry"],
+    "type": [
+      "Writing",
+      "Poetry"
+    ],
     "summary": "一首关于风、黑夜、时间切片与乌鸦的现代诗。",
     "cover": "/images/works/crow-fukase-ravens-reference.jpg",
     "published": true,

@@ -1,14 +1,21 @@
 import aboutData from "@/content/about.json";
 import notesData from "@/content/notes.json";
+import secretData from "@/content/secret.json";
 import worksData from "@/content/works.json";
-import type { About, Note, Work } from "@/lib/types";
+import type { About, Note, Secret, Work } from "@/lib/types";
 
 export const about = aboutData as About;
+export const secret = secretData as Secret;
 
 export function getPublishedWorks(): Work[] {
   return (worksData as Work[])
     .filter((work) => work.published)
-    .sort((a, b) => Number(b.year) - Number(a.year));
+    .sort((a, b) => getSortableYear(b.year) - getSortableYear(a.year));
+}
+
+function getSortableYear(year: string) {
+  const match = year.match(/\d{4}/);
+  return match ? Number(match[0]) : 0;
 }
 
 export function getWork(slug: string): Work | undefined {
@@ -23,6 +30,12 @@ export function getPublishedNotes(): Note[] {
 
 export function getNote(slug: string): Note | undefined {
   return getPublishedNotes().find((note) => note.slug === slug);
+}
+
+export function getPublishedSecretEntries(): Note[] {
+  return (secret.entries as Note[])
+    .filter((entry) => entry.published)
+    .sort((a, b) => b.date.localeCompare(a.date));
 }
 
 export function getRecentUpdates() {

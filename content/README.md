@@ -9,6 +9,7 @@
 常用字段：
 
 - `slug`：页面地址，只用英文小写、数字和连字符，例如 `my-first-film`。
+- `subtitle`：作品小标题，可选。例如街头摄影里的“决定性瞬间”。
 - `published`：设为 `true` 会公开显示，设为 `false` 会隐藏。
 - `modules`：详情页正文模块，可以自由组合段落、图片、图片组、视频、引用、分隔线、链接和创作说明。
 
@@ -19,6 +20,7 @@
 { "kind": "poem", "text": "第一行\n第二行\n\n第二段第一行" }
 { "kind": "image", "src": "https://...", "alt": "图片描述", "caption": "可选说明" }
 { "kind": "gallery", "images": [{ "src": "https://...", "alt": "图片描述" }] }
+{ "kind": "yearGallery", "year": "2026", "note": "这一年的说明。", "images": [{ "src": "https://...", "alt": "图片描述" }] }
 { "kind": "video", "url": "https://www.youtube.com/embed/...", "caption": "可选说明" }
 { "kind": "quote", "text": "一段引用。" }
 { "kind": "divider" }

@@ -24,6 +24,12 @@ export type ContentModule =
       images: ImageItem[];
     }
   | {
+      kind: "yearGallery";
+      year: string;
+      note?: string;
+      images: ImageItem[];
+    }
+  | {
       kind: "video";
       url: string;
       caption?: string;
@@ -52,6 +58,7 @@ export type ImageModule = ImageItem & {
 export type Work = {
   slug: string;
   title: string;
+  subtitle?: string;
   year: string;
   type: string[];
   summary: string;
@@ -68,6 +75,12 @@ export type Note = {
   tags?: string[];
   published: boolean;
   modules: ContentModule[];
+};
+
+export type Secret = {
+  title: string;
+  intro: string[];
+  entries: Note[];
 };
 
 export type About = {

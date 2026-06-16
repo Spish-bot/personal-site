@@ -36,14 +36,14 @@ export default function NoteDetailPage({ params }: NoteDetailPageProps) {
 
   return (
     <main className="mx-auto w-full max-w-5xl px-5 py-14 md:px-8 md:py-20">
-      <article className="mx-auto max-w-3xl">
-        <header className="mb-12">
-          <p className="mb-4 text-sm uppercase text-muted">
+      <article className="reading-width mx-auto">
+        <header className="mb-14">
+          <p className="mb-5 text-xs uppercase tracking-wide text-soft">
             <time dateTime={note.date}>{formatDate(note.date)}</time>
             {note.tags?.length ? ` / ${note.tags.join(" / ")}` : ""}
           </p>
-          <h1 className="text-4xl font-normal leading-tight text-ink md:text-6xl">{note.title}</h1>
-          <p className="mt-7 text-xl leading-9 text-muted">{note.summary}</p>
+          <h1 className="text-4xl font-normal leading-tight text-ink md:text-5xl">{note.title}</h1>
+          <p className="mt-7 text-lg leading-9 text-muted">{note.summary}</p>
         </header>
         <ContentModules modules={note.modules} />
       </article>

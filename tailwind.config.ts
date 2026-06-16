@@ -21,10 +21,11 @@ const config: Config = {
         serif: ["Georgia", "Times New Roman", "serif"]
       },
       colors: {
-        paper: "#fbfaf8",
-        ink: "#1d1d1b",
-        muted: "#6f6d68",
-        line: "#e8e5df"
+        paper: "#fbfaf7",
+        ink: "#24231f",
+        muted: "#747069",
+        soft: "#9b968c",
+        line: "#e9e4dc"
       }
     }
   },

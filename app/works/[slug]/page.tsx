@@ -36,13 +36,14 @@ export default function WorkDetailPage({ params }: WorkDetailPageProps) {
 
   return (
     <main className="mx-auto w-full max-w-5xl px-5 py-14 md:px-8 md:py-20">
-      <article className="mx-auto max-w-3xl">
-        <header className="mb-12">
-          <p className="mb-4 text-sm uppercase text-muted">
+      <article className="reading-width mx-auto">
+        <header className="mb-14">
+          <p className="mb-5 text-xs uppercase tracking-wide text-soft">
             {work.year} / {work.type.join(" / ")}
           </p>
-          <h1 className="text-4xl font-normal leading-tight text-ink md:text-6xl">{work.title}</h1>
-          <p className="mt-7 text-xl leading-9 text-muted">{work.summary}</p>
+          <h1 className="text-4xl font-normal leading-tight text-ink md:text-5xl">{work.title}</h1>
+          {work.subtitle ? <p className="mt-4 text-sm text-soft">{work.subtitle}</p> : null}
+          <p className="mt-7 text-lg leading-9 text-muted">{work.summary}</p>
         </header>
         <ContentModules modules={work.modules} />
       </article>

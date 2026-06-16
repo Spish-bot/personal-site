@@ -11,8 +11,8 @@ html {
 }
 
 body {
-  background: #fbfaf8;
-  color: #1d1d1b;
+  background: #fbfaf7;
+  color: #24231f;
   font-feature-settings: "kern";
   letter-spacing: 0;
 }
@@ -23,16 +23,30 @@ body {
 
 a {
   text-underline-offset: 4px;
+  text-decoration-color: #d8d2c8;
 }
 
 figcaption {
-  color: #6f6d68;
+  color: #747069;
   font-size: 0.875rem;
   line-height: 1.6;
 }
 
 .content-text {
-  color: #3f3d39;
-  font-size: 1.0625rem;
-  line-height: 1.95;
+  color: #46423b;
+  font-size: 1.03125rem;
+  line-height: 2.05;
+}
+
+.reading-width {
+  max-width: 42rem;
+}
+
+.quiet-link {
+  border-bottom: 1px solid #d8d2c8;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.quiet-link:hover {
+  border-color: #24231f;
 }

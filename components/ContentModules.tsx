@@ -17,7 +17,7 @@ export function ContentModules({ modules }: ContentModulesProps) {
             );
           case "poem":
             return (
-              <div key={index} className="whitespace-pre-line font-serif text-xl leading-loose text-ink md:text-2xl">
+              <div key={index} className="whitespace-pre-line font-serif text-lg leading-loose text-ink md:text-xl">
                 {module.text}
               </div>
             );
@@ -39,6 +39,27 @@ export function ContentModules({ modules }: ContentModulesProps) {
                 ))}
               </div>
             );
+          case "yearGallery":
+            return (
+              <section key={index} className="border-t border-line pt-7">
+                <div className="mb-6">
+                  <h2 className="text-2xl font-normal text-ink">{module.year}</h2>
+                  {module.note ? <p className="mt-3 text-sm leading-7 text-muted">{module.note}</p> : null}
+                </div>
+                {module.images.length ? (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {module.images.map((image) => (
+                      <figure key={image.src} className="space-y-3">
+                        <img src={image.src} alt={image.alt} className="aspect-[4/3] w-full object-cover" />
+                        {image.caption ? <figcaption>{image.caption}</figcaption> : null}
+                      </figure>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm leading-7 text-soft">这一年的街头照片还没有放进来。</p>
+                )}
+              </section>
+            );
           case "video":
             return (
               <figure key={index} className="space-y-3">
@@ -56,7 +77,7 @@ export function ContentModules({ modules }: ContentModulesProps) {
             );
           case "quote":
             return (
-              <blockquote key={index} className="border-l border-ink pl-5 font-serif text-2xl leading-relaxed text-ink">
+              <blockquote key={index} className="border-l border-line pl-5 font-serif text-xl leading-relaxed text-muted">
                 {module.text}
               </blockquote>
             );
@@ -71,7 +92,7 @@ export function ContentModules({ modules }: ContentModulesProps) {
             return (
               <div key={index} className="flex flex-wrap gap-4 text-sm">
                 {module.items.map((item) => (
-                  <a key={item.href} href={item.href} className="border-b border-line pb-1 text-ink hover:border-ink">
+                  <a key={item.href} href={item.href} className="quiet-link pb-1 text-ink">
                     {item.label}
                   </a>
                 ))}
