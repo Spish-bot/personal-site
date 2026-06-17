@@ -1,0 +1,17 @@
+{
+  "eyebrow": "Personal archive",
+  "portrait": {
+    "src": "/images/spish-dog-portrait.jpg",
+    "alt": "Dog persona portrait"
+  },
+  "aboutLabel": "About",
+  "aboutText": "Who am I？",
+  "worksEyebrow": "Works",
+  "worksTitle": "Project archive",
+  "worksLinkLabel": "All works",
+  "worksCount": 2,
+  "notesEyebrow": "Notes",
+  "notesTitle": "Recent writing",
+  "notesLinkLabel": "All notes",
+  "notesCount": 4
+}

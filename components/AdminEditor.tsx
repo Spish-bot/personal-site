@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import type { About, ContentModule, ImageItem, LinkItem, Note, Secret, Work } from "@/lib/types";
+import type { About, ContentModule, Home, ImageItem, LinkItem, Note, Secret, Work } from "@/lib/types";
 
 type AdminData = {
   about: About;
+  home: Home;
   works: Work[];
   notes: Note[];
   secret: Secret;
 };
 
-type Section = "notes" | "works" | "secret" | "about";
+type Section = "home" | "notes" | "works" | "secret" | "about";
 type UploadedImage = {
   src: string;
   alt: string;
@@ -22,6 +23,21 @@ const emptyAbout: About = {
   intro: [""],
   images: [],
   links: []
+};
+
+const emptyHome: Home = {
+  eyebrow: "",
+  portrait: { src: "", alt: "" },
+  aboutLabel: "About",
+  aboutText: "",
+  worksEyebrow: "Works",
+  worksTitle: "",
+  worksLinkLabel: "All works",
+  worksCount: 2,
+  notesEyebrow: "Notes",
+  notesTitle: "",
+  notesLinkLabel: "All notes",
+  notesCount: 4
 };
 
 function slugify(value: string) {
@@ -127,7 +143,7 @@ const buttonClass = "border border-line px-3 py-2 text-sm text-ink hover:border-
 const primaryButtonClass = "border border-ink bg-ink px-4 py-2 text-sm text-white disabled:opacity-40";
 
 export function AdminEditor() {
-  const [section, setSection] = useState<Section>("notes");
+  const [section, setSection] = useState<Section>("home");
   const [data, setData] = useState<AdminData | null>(null);
   const [selectedWork, setSelectedWork] = useState(0);
   const [selectedNote, setSelectedNote] = useState(0);
@@ -284,6 +300,11 @@ export function AdminEditor() {
     updateData({ ...data, about: nextAbout });
   }
 
+  function updateHome(nextHome: Home) {
+    if (!data) return;
+    updateData({ ...data, home: nextHome });
+  }
+
   if (!data) {
     return <p className="border-y border-line py-8 text-sm text-muted">{status}</p>;
   }
@@ -292,14 +313,22 @@ export function AdminEditor() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-3 border-y border-line py-4">
         <div className="flex gap-2">
-          {(["notes", "works", "secret", "about"] as Section[]).map((item) => (
+          {(["home", "notes", "works", "secret", "about"] as Section[]).map((item) => (
             <button
               key={item}
               type="button"
               onClick={() => setSection(item)}
               className={section === item ? primaryButtonClass : buttonClass}
             >
-              {item === "notes" ? "Notes" : item === "works" ? "Works" : item === "secret" ? "Secret" : "About"}
+              {item === "home"
+                ? "Home"
+                : item === "notes"
+                  ? "Notes"
+                  : item === "works"
+                    ? "Works"
+                    : item === "secret"
+                      ? "Secret"
+                      : "About"}
             </button>
           ))}
         </div>
@@ -310,6 +339,15 @@ export function AdminEditor() {
           </button>
         </div>
       </div>
+
+      {section === "home" ? (
+        <HomeForm
+          home={data.home ?? emptyHome}
+          about={data.about ?? emptyAbout}
+          onChange={updateHome}
+          onChangeAbout={updateAbout}
+        />
+      ) : null}
 
       {section === "notes" ? (
         <TwoColumnEditor
@@ -338,7 +376,11 @@ export function AdminEditor() {
           onDelete={deleteWork}
         >
           {selectedItem ? (
-            <WorkForm work={selectedItem as Work} onChange={(work) => updateWork(selectedWork, work)} />
+            <WorkForm
+              work={selectedItem as Work}
+              yearOptions={getWorkYearOptions(data.works)}
+              onChange={(work) => updateWork(selectedWork, work)}
+            />
           ) : (
             <EmptyState label="No work selected." />
           )}
@@ -415,7 +457,22 @@ function TwoColumnEditor({
   );
 }
 
-function WorkForm({ work, onChange }: { work: Work; onChange: (work: Work) => void }) {
+function getWorkYearOptions(works: Work[]) {
+  const currentYear = new Date().getFullYear();
+  const nearbyYears = Array.from({ length: 7 }, (_, index) => String(currentYear + 1 - index));
+  const existingYears = works.map((work) => work.year.trim()).filter(Boolean);
+  return Array.from(new Set([...existingYears, ...nearbyYears, ""]));
+}
+
+function WorkForm({
+  work,
+  yearOptions,
+  onChange
+}: {
+  work: Work;
+  yearOptions: string[];
+  onChange: (work: Work) => void;
+}) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2">
@@ -429,7 +486,26 @@ function WorkForm({ work, onChange }: { work: Work; onChange: (work: Work) => vo
           <input className={inputClass} value={work.slug} onChange={(event) => onChange({ ...work, slug: slugify(event.target.value) })} />
         </Field>
         <Field label="Year">
-          <input className={inputClass} value={work.year} onChange={(event) => onChange({ ...work, year: event.target.value })} />
+          <div className="grid gap-2">
+            <input
+              className={inputClass}
+              value={work.year}
+              list="work-year-options"
+              onChange={(event) => onChange({ ...work, year: event.target.value })}
+            />
+            <datalist id="work-year-options">
+              {yearOptions.map((year) => (
+                <option key={year || "empty-year"} value={year} />
+              ))}
+            </datalist>
+            <select className={inputClass} value={work.year} onChange={(event) => onChange({ ...work, year: event.target.value })}>
+              {yearOptions.map((year) => (
+                <option key={year || "empty-year-select"} value={year}>
+                  {year || "No year / Other"}
+                </option>
+              ))}
+            </select>
+          </div>
         </Field>
         <Field label="Type tags, comma separated">
           <input className={inputClass} value={listToText(work.type)} onChange={(event) => onChange({ ...work, type: textToList(event.target.value) })} />
@@ -558,6 +634,114 @@ function AboutForm({ about, onChange }: { about: About; onChange: (about: About)
       <Field label="Links, one per line: label | href">
         <textarea className={textareaClass} value={linksToText(about.links)} onChange={(event) => onChange({ ...about, links: textToLinks(event.target.value) })} />
       </Field>
+    </div>
+  );
+}
+
+function HomeForm({
+  home,
+  about,
+  onChange,
+  onChangeAbout
+}: {
+  home: Home;
+  about: About;
+  onChange: (home: Home) => void;
+  onChangeAbout: (about: About) => void;
+}) {
+  return (
+    <div className="max-w-3xl space-y-8">
+      <section className="space-y-4 border-y border-line py-6">
+        <h2 className="text-sm uppercase text-muted">Hero</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="Homepage name">
+            <input className={inputClass} value={about.name} onChange={(event) => onChangeAbout({ ...about, name: event.target.value })} />
+          </Field>
+          <Field label="Homepage description">
+            <input className={inputClass} value={about.description} onChange={(event) => onChangeAbout({ ...about, description: event.target.value })} />
+          </Field>
+        </div>
+        <Field label="Small label above name">
+          <input className={inputClass} value={home.eyebrow} onChange={(event) => onChange({ ...home, eyebrow: event.target.value })} />
+        </Field>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="Portrait image URL">
+            <input className={inputClass} value={home.portrait.src} onChange={(event) => onChange({ ...home, portrait: { ...home.portrait, src: event.target.value } })} />
+          </Field>
+          <Field label="Portrait alt text">
+            <input className={inputClass} value={home.portrait.alt} onChange={(event) => onChange({ ...home, portrait: { ...home.portrait, alt: event.target.value } })} />
+          </Field>
+        </div>
+        <ImagePreviewGrid images={[home.portrait]} />
+        <ImageUploader
+          label="Upload homepage portrait"
+          multiple={false}
+          onUploaded={(images) => {
+            const image = images[0];
+            if (image) onChange({ ...home, portrait: { src: image.src, alt: home.portrait.alt || image.alt } });
+          }}
+        />
+      </section>
+
+      <section className="space-y-4 border-b border-line pb-6">
+        <h2 className="text-sm uppercase text-muted">About preview</h2>
+        <Field label="About label">
+          <input className={inputClass} value={home.aboutLabel} onChange={(event) => onChange({ ...home, aboutLabel: event.target.value })} />
+        </Field>
+        <Field label="About short text on homepage">
+          <textarea className={textareaClass} value={home.aboutText} onChange={(event) => onChange({ ...home, aboutText: event.target.value })} />
+        </Field>
+      </section>
+
+      <section className="space-y-4 border-b border-line pb-6">
+        <h2 className="text-sm uppercase text-muted">Works section</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="Small label">
+            <input className={inputClass} value={home.worksEyebrow} onChange={(event) => onChange({ ...home, worksEyebrow: event.target.value })} />
+          </Field>
+          <Field label="Section title">
+            <input className={inputClass} value={home.worksTitle} onChange={(event) => onChange({ ...home, worksTitle: event.target.value })} />
+          </Field>
+          <Field label="Link text">
+            <input className={inputClass} value={home.worksLinkLabel} onChange={(event) => onChange({ ...home, worksLinkLabel: event.target.value })} />
+          </Field>
+          <Field label="Number of works shown">
+            <input
+              className={inputClass}
+              type="number"
+              min="0"
+              max="12"
+              value={home.worksCount}
+              onChange={(event) => onChange({ ...home, worksCount: Math.max(0, Number(event.target.value) || 0) })}
+            />
+          </Field>
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-sm uppercase text-muted">Notes section</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Field label="Small label">
+            <input className={inputClass} value={home.notesEyebrow} onChange={(event) => onChange({ ...home, notesEyebrow: event.target.value })} />
+          </Field>
+          <Field label="Section title">
+            <input className={inputClass} value={home.notesTitle} onChange={(event) => onChange({ ...home, notesTitle: event.target.value })} />
+          </Field>
+          <Field label="Link text">
+            <input className={inputClass} value={home.notesLinkLabel} onChange={(event) => onChange({ ...home, notesLinkLabel: event.target.value })} />
+          </Field>
+          <Field label="Number of notes shown">
+            <input
+              className={inputClass}
+              type="number"
+              min="0"
+              max="12"
+              value={home.notesCount}
+              onChange={(event) => onChange({ ...home, notesCount: Math.max(0, Number(event.target.value) || 0) })}
+            />
+          </Field>
+        </div>
+      </section>
     </div>
   );
 }

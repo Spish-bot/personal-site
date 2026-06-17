@@ -4,10 +4,7 @@
     "title": "在我高中阳台的那些夜晚",
     "date": "2026-04-13",
     "summary": "一场名为回忆的重建。",
-    "tags": [
-      "memory",
-      "school"
-    ],
+    "tags": [],
     "published": true,
     "modules": [
       {
@@ -67,10 +64,7 @@
     "title": "我的南京游记",
     "date": "2026-04-29",
     "summary": "2026.4.29初稿，2026.6.13 改。",
-    "tags": [
-      "travel",
-      "nanjing"
-    ],
+    "tags": [],
     "published": true,
     "modules": [
       {
@@ -132,10 +126,7 @@
     "title": "我的2025",
     "date": "2025-12-31",
     "summary": "年终回望。",
-    "tags": [
-      "year-end",
-      "life"
-    ],
+    "tags": [],
     "published": true,
     "modules": [
       {

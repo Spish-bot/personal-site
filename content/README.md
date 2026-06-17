@@ -3,6 +3,7 @@
 第一版内容都放在这个 `content` 文件夹里：
 
 - `about.json`：修改个人介绍、首页描述、联系方式。
+- `home.json`：修改首页展示文字、首页头像、Works / Notes 首页展示数量。
 - `works.json`：修改作品列表和作品详情内容。
 - `notes.json`：修改生活随想列表和详情内容。
 

@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "fs/promises";
 import path from "path";
 import { NextResponse } from "next/server";
-import type { About, Note, Secret, Work } from "@/lib/types";
+import type { About, Home, Note, Secret, Work } from "@/lib/types";
 
 const contentDir = path.join(process.cwd(), "content");
 
@@ -26,14 +26,15 @@ export async function GET() {
   const blocked = localOnly();
   if (blocked) return blocked;
 
-  const [about, works, notes, secret] = await Promise.all([
+  const [about, home, works, notes, secret] = await Promise.all([
     readJson<About>("about.json"),
+    readJson<Home>("home.json"),
     readJson<Work[]>("works.json"),
     readJson<Note[]>("notes.json"),
     readJson<Secret>("secret.json")
   ]);
 
-  return NextResponse.json({ about, works, notes, secret });
+  return NextResponse.json({ about, home, works, notes, secret });
 }
 
 export async function PUT(request: Request) {
@@ -42,17 +43,19 @@ export async function PUT(request: Request) {
 
   const body = (await request.json()) as {
     about?: About;
+    home?: Home;
     works?: Work[];
     notes?: Note[];
     secret?: Secret;
   };
 
-  if (!body.about || !Array.isArray(body.works) || !Array.isArray(body.notes) || !body.secret) {
-    return NextResponse.json({ message: "Missing about, works, notes, or secret data." }, { status: 400 });
+  if (!body.about || !body.home || !Array.isArray(body.works) || !Array.isArray(body.notes) || !body.secret) {
+    return NextResponse.json({ message: "Missing about, home, works, notes, or secret data." }, { status: 400 });
   }
 
   await Promise.all([
     writeJson("about.json", body.about),
+    writeJson("home.json", body.home),
     writeJson("works.json", body.works),
     writeJson("notes.json", body.notes),
     writeJson("secret.json", body.secret)

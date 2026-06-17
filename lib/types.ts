@@ -83,6 +83,21 @@ export type Secret = {
   entries: Note[];
 };
 
+export type Home = {
+  eyebrow: string;
+  portrait: ImageItem;
+  aboutLabel: string;
+  aboutText: string;
+  worksEyebrow: string;
+  worksTitle: string;
+  worksLinkLabel: string;
+  worksCount: number;
+  notesEyebrow: string;
+  notesTitle: string;
+  notesLinkLabel: string;
+  notesCount: number;
+};
+
 export type About = {
   name: string;
   description: string;

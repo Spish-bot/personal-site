@@ -1,33 +1,27 @@
 [
   {
     "slug": "street-photography",
-    "title": "街头摄影",
-    "subtitle": "决定性瞬间",
-    "year": "2026-",
+    "title": "Between Decisive Moments",
+    "year": "",
     "type": [
-      "Photography",
-      "Street"
+      "Photography"
     ],
-    "summary": "一个长期存放偶然街头照片的杂图站。以年份为记录模块，不追求完整项目，只保留路上碰到的瞬间。",
-    "cover": "/images/works/street-photography/2026/01-lamp-blossoms.JPG",
+    "summary": "The moments I captured with my Sony Alpha 7C II.",
+    "cover": "/images/works/street-photography/2026/02-snow-night-road.JPG ",
     "published": true,
     "modules": [
       {
         "kind": "paragraph",
-        "text": "这里会存放一些偶尔拍到的街头照片。它不一定构成完整的摄影项目，更像一个按年份缓慢增长的图像抽屉。"
+        "text": ""
       },
       {
         "kind": "yearGallery",
         "year": "2026",
-        "note": "这一年的街头照片可以陆续放在这里。",
+        "note": "",
         "images": [
           {
             "src": "/images/works/street-photography/2026/01-lamp-blossoms.JPG",
             "alt": "Night lamp and red blossoms in soft focus"
-          },
-          {
-            "src": "/images/works/street-photography/2026/02-snow-night-road.JPG",
-            "alt": "Black-and-white snowy road with parked bikes and city lights"
           },
           {
             "src": "/images/works/street-photography/2026/03-rocky-shore.JPG",
@@ -48,6 +42,10 @@
           {
             "src": "/images/works/street-photography/2026/07-snow-lamp.jpg",
             "alt": "Black-and-white snow passing through a bright street lamp"
+          },
+          {
+            "src": "/images/works/street-photography/2026/02-snow-night-road.JPG",
+            "alt": ""
           }
         ]
       }
@@ -61,7 +59,7 @@
       "Writing",
       "Poetry"
     ],
-    "summary": "一首关于风、黑夜、时间切片与乌鸦的现代诗。",
+    "summary": "关于片刻与永在。",
     "cover": "/images/works/crow-fukase-ravens-reference.jpg",
     "published": true,
     "modules": [
@@ -83,6 +81,190 @@
             "href": "https://en.wikipedia.org/wiki/Masahisa_Fukase"
           }
         ]
+      }
+    ]
+  },
+  {
+    "slug": "rain-poem",
+    "title": "雨",
+    "year": "2026",
+    "type": [
+      "Writing",
+      "Poetry"
+    ],
+    "summary": "一首关于暴雨、城市、青蛙、羊群与相拥的现代诗。",
+    "published": true,
+    "modules": [
+      {
+        "kind": "poem",
+        "text": "乌云汇合，泥沙消隐\n雨为青蛙把桥铺满陆地\n青蛙双手合十\n接白刃，亦或祈祷：\n这破碎的城市里\n暴雨不再隐去\n\n在寻找雨的边陲的羊群举着\n伞和火把——火把棍\n它们把太阳还给雨中的夜\n支离破碎，暮色茫茫\n\n在破碎的雨里我们浑身湿透\n在破碎的雨里我们紧紧相拥"
+      }
+    ]
+  },
+  {
+    "slug": "july-poem",
+    "title": "七月",
+    "year": "2026",
+    "type": [
+      "Writing",
+      "Poetry"
+    ],
+    "summary": "一首关于七月、解放、渔夫、法医与心脏的现代诗。",
+    "published": true,
+    "modules": [
+      {
+        "kind": "poem",
+        "text": "在七月我们获得解放，回到城市\n我们把滴尽的沙漏倒转\n让幸福从头开始计时\n\n赤手打鱼的渔夫和法医手挽着手\n海草再上身的渔夫想起曾经的誓言：\n“我为你打鱼，你为我剖鱼\n这难道不是理所应当的么？”\n\n不，我不再从事剖鱼的事业\n人也不再\n我不再剖开大脑或心脏\n我让它们长久的未见天日\n\n在七月\n我让渔夫沉向大海\n我自己蛰居心脏\n在七月我们再次回到荒凉"
+      }
+    ]
+  },
+  {
+    "slug": "untitled-wind-poem",
+    "title": "无题",
+    "year": "2026",
+    "type": [
+      "Writing",
+      "Poetry"
+    ],
+    "summary": "一首很短的风。",
+    "published": true,
+    "modules": [
+      {
+        "kind": "poem",
+        "text": "你像一阵无垠的风\n总在掠过我"
+      }
+    ]
+  },
+  {
+    "slug": "queen-road-east",
+    "title": "皇后大道东",
+    "year": "2026",
+    "type": [
+      "Writing",
+      "Prose"
+    ],
+    "summary": "一篇关于周末、上学、人生列车与皇后大道东的短文。",
+    "published": true,
+    "modules": [
+      {
+        "kind": "paragraph",
+        "text": "又度过一个二十五小时的周末后，我得去上学。所以就像把大象塞进冰箱的第一步是打开冰箱门一样，我打开门，走了进去。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "刚解封的路边死一般寂静。我看着路边的景况，猜想昨天是有哪个男孩被渣女诱骗了——不然门口一滩滩的泪——和那升腾起的乌云笼罩——从何而来。整个天都是死寂的鱼肚白和鱼鳞灰涂抹而成，新年礼炮奄奄一息地在它身后闪烁绽开。因而面暗上加暗的柏油路上空无一物，仿佛是有一道无形的空气墙横亘在人行道与柏油路之间，以至于路上甚至没有一片落叶，只剩下泪水斑驳。整个世界都有气无力，唯一鲜艳些的色彩是零散几张浸在泪潭里的黄色卡片上的美女，身材曼妙，风情万种；比她的暧昧的眼神更暧昧的是卡片上加大加粗的汉字与数字。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "我庄严而肃穆地等待着，虔诚地不违抗那空气墙的号令从赫红的地砖向深灰的柏油移动半步。打开打车软件，它说车还有三分钟到达。刚巧，苏州的地铁也是三分钟一班，而这空旷的柏油路也正像除去了死人未尝有人真正踏足的，名为铁轨的荒芜的禁忌之地。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "我不禁回忆起青天实验中学德育处主任王琴美的教导，她说，人生如列车，成绩为车票，成绩差的人便只能购得质量差、距离短的车票，只有努力学习才能超过那些早早下车者，成为社会金字塔——其实准确来说，是社会图钉——的最上端，成为人上人。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "谨遵恩师教诲，我不由挺直了胸板，注视着柏油路的左边，惴惴着期待着属于我的人生列车的到来。"
+      },
+      {
+        "kind": "heading",
+        "text": "二"
+      },
+      {
+        "kind": "paragraph",
+        "text": "车到了，却令我想登之却不能，因为它或许有些脱轨，使我必须要先步入那块禁忌之地才能再登上它。我立在原地，望着那辆黑色丰田，想着我步入那禁忌之地便旋即被制裁者——或许是辆疾驶的摩托，或许是另一辆黑色丰田，又或者正是这辆黑色丰田的分身——撞飞洒血的场面。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "一片初春的落叶摇摇晃晃落下来，它在柏油路上飘着犹豫了片刻，可能是被勒令的吧，最后还是落在了步道上。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "“愣啥呢？”司机摇下车窗。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "我有些不满，跟他投诉，哪有在站台不能跨上的列车啊。我要他把脱轨的车泊入正道，再按下按钮把车门为我开启。"
+      },
+      {
+        "kind": "heading",
+        "text": "三"
+      },
+      {
+        "kind": "paragraph",
+        "text": "最后还是诚惶诚恐坐上日思夜想的人生列车，或许是太激动，大脑无比混乱，无数被割裂重组的词语像一团炸糊的马赛克一般脑向我袭来。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "人生如列车、黄色卡片、冰箱、泪雨……\n黄色卡片、人生如列车、泪雨、冰箱……"
+      },
+      {
+        "kind": "paragraph",
+        "text": "纷杂的意向在我脑中那块马赛克撞击、杂糅。我试图把其中的某一个词语从那虫中剥离，但每当我如此尝试，便有无数的词如同被连根拔起的根随之而昭于眼前，根连着泥土，泥土死死咬住这缠绵的虫，于是我只好松手，那虫就带着他的泥土和植物满意地回归不太一样的原样。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "我想，只有把我从头顶竖直向下劈成两半，我的记忆才能从一团乱麻变成两份半团乱麻吧。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "我还在乱想。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "人生列车……下车……等车……周末……冰箱……大象……阴雨……泪水……\n黄色卡片……美女……色情……利益……成年人……现实……虚无……"
+      },
+      {
+        "kind": "paragraph",
+        "text": "不能再这样漫无边际地想下去了，我想。于是我抓住一个字眼，强迫自己聚焦于此，一点点理清这些事物的细枝末枝。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "人生列车，人生列车，人生列车……第一个联想到的词……下车！"
+      },
+      {
+        "kind": "heading",
+        "text": "四"
+      },
+      {
+        "kind": "paragraph",
+        "text": "下车！"
+      },
+      {
+        "kind": "paragraph",
+        "text": "我不由自主地大叫出来。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "司机诧异地回头望了一眼。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "我猛然觉知，自己方才说了多么离经叛道的话。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "不，不，我不下车，不好意思，对不起，对不起，我说错了。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "刚刚发生……"
+      },
+      {
+        "kind": "paragraph",
+        "text": "闭嘴！"
+      },
+      {
+        "kind": "paragraph",
+        "text": "他愣住了，没再说下去，我松了口气。刚刚司机忽然张开他的血盆大口，直捣我的大脑，妄图把本就不明晰的脑沟搅成龟裂的旱地。还好我制止及时，把他的恶魔关回了他的肚子。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "我说，继续开车吧，要交流的话打手势。"
+      },
+      {
+        "kind": "paragraph",
+        "text": "哦对了，绕下道，走皇后大道东吧，我想慢点下车。"
       }
     ]
   }

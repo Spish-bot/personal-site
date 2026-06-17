@@ -1,10 +1,12 @@
 import aboutData from "@/content/about.json";
+import homeData from "@/content/home.json";
 import notesData from "@/content/notes.json";
 import secretData from "@/content/secret.json";
 import worksData from "@/content/works.json";
-import type { About, Note, Secret, Work } from "@/lib/types";
+import type { About, Home, Note, Secret, Work } from "@/lib/types";
 
 export const about = aboutData as About;
+export const home = homeData as Home;
 export const secret = secretData as Secret;
 
 export function getPublishedWorks(): Work[] {
