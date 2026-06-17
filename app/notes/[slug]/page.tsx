@@ -43,7 +43,6 @@ export default function NoteDetailPage({ params }: NoteDetailPageProps) {
             {note.tags?.length ? ` / ${note.tags.join(" / ")}` : ""}
           </p>
           <h1 className="text-4xl font-normal leading-tight text-ink md:text-5xl">{note.title}</h1>
-          <p className="mt-7 text-lg leading-9 text-muted">{note.summary}</p>
         </header>
         <ContentModules modules={note.modules} />
       </article>

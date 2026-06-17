@@ -43,7 +43,6 @@ export default function WorkDetailPage({ params }: WorkDetailPageProps) {
           </p>
           <h1 className="text-4xl font-normal leading-tight text-ink md:text-5xl">{work.title}</h1>
           {work.subtitle ? <p className="mt-4 text-sm text-soft">{work.subtitle}</p> : null}
-          <p className="mt-7 text-lg leading-9 text-muted">{work.summary}</p>
         </header>
         <ContentModules modules={work.modules} />
       </article>
