@@ -1,50 +1,40 @@
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { ContentModules } from "@/components/ContentModules";
-import { formatDate, getNote, getPublishedNotes } from "@/lib/content";
+import { ReadingFooter } from "@/components/ReadingFooter";
+import { ReadingProgress } from "@/components/ReadingProgress";
+import { getNote, getPublishedNotes } from "@/lib/content";
 
-type NoteDetailPageProps = {
-  params: {
-    slug: string;
-  };
-};
+type Props = { params: { slug: string } };
 
 export function generateStaticParams() {
-  return getPublishedNotes().map((note) => ({
-    slug: note.slug
-  }));
+  return getPublishedNotes().map((note) => ({ slug: note.slug }));
 }
 
-export function generateMetadata({ params }: NoteDetailPageProps) {
+export function generateMetadata({ params }: Props) {
   const note = getNote(params.slug);
-
-  if (!note) {
-    return {};
-  }
-
-  return {
-    title: note.title,
-    description: note.summary
-  };
+  return note ? { title: note.title, description: note.summary } : {};
 }
 
-export default function NoteDetailPage({ params }: NoteDetailPageProps) {
+export default function NoteDetailPage({ params }: Props) {
   const note = getNote(params.slug);
-
-  if (!note) {
-    notFound();
-  }
-
+  if (!note) notFound();
   return (
-    <main className="mx-auto w-full max-w-5xl px-5 py-14 md:px-8 md:py-20">
-      <article className="reading-width mx-auto">
-        <header className="mb-14">
-          <p className="mb-5 text-xs uppercase tracking-wide text-soft">
-            <time dateTime={note.date}>{formatDate(note.date)}</time>
-            {note.tags?.length ? ` / ${note.tags.join(" / ")}` : ""}
-          </p>
-          <h1 className="text-4xl font-normal leading-tight text-ink md:text-5xl">{note.title}</h1>
+    <main id="main-content" className="site-width detail-page">
+      <ReadingProgress />
+      <Link href="/notes" className="text-link back-link"><ArrowLeft size={14} aria-hidden="true" />Notes</Link>
+      <article className="reading-article">
+        <header className="article-heading">
+          <div className="article-meta meta">
+            <time dateTime={note.date}>{note.date.replaceAll("-", ".")}</time>
+            {note.tags?.length ? <span>{note.tags.join(" / ")}</span> : null}
+          </div>
+          <h1>{note.title}</h1>
+          {note.summary ? <p className="article-deck">{note.summary}</p> : null}
         </header>
         <ContentModules modules={note.modules} />
+        <ReadingFooter entries={getPublishedNotes()} slug={note.slug} section="notes" />
       </article>
     </main>
   );

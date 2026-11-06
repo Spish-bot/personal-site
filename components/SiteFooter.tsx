@@ -1,16 +1,23 @@
+import Link from "next/link";
+import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { about } from "@/lib/content";
 
 export function SiteFooter() {
   return (
-    <footer className="mx-auto mt-24 flex w-full max-w-5xl flex-col gap-4 border-t border-line px-5 py-8 text-sm text-soft md:flex-row md:items-center md:justify-between md:px-8">
-      <p>© {new Date().getFullYear()} {about.name}</p>
-      <div className="flex flex-wrap gap-4">
-        {about.links?.map((link) => (
-          <a key={link.href} href={link.href} className="transition hover:text-ink">
-            {link.label}
-          </a>
-        ))}
+    <footer className="site-footer site-width">
+      <div className="footer-identity">
+        <Link href="/" className="footer-name">{about.name}<span className="wordmark-period" aria-hidden="true">*</span></Link>
+        <p>{about.description}</p>
       </div>
+      <div className="footer-meta">
+        <div className="footer-links">
+          {about.links?.map((link) => (
+            <a key={link.href} href={link.href}>{link.label}<ArrowUpRight size={13} aria-hidden="true" /></a>
+          ))}
+        </div>
+        <p className="meta">© {new Date().getFullYear()}</p>
+      </div>
+      <a href="#top" className="back-to-top" aria-label="返回页面顶部"><ArrowUp size={17} aria-hidden="true" /></a>
     </footer>
   );
 }

@@ -312,11 +312,12 @@ export function AdminEditor() {
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-3 border-y border-line py-4">
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2" role="group" aria-label="编辑页面">
           {(["home", "notes", "works", "secret", "about"] as Section[]).map((item) => (
             <button
               key={item}
               type="button"
+              aria-pressed={section === item}
               onClick={() => setSection(item)}
               className={section === item ? primaryButtonClass : buttonClass}
             >
@@ -696,10 +697,10 @@ function HomeForm({
       <section className="space-y-4 border-b border-line pb-6">
         <h2 className="text-sm uppercase text-muted">Works section</h2>
         <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Small label">
+          <Field label="Works heading">
             <input className={inputClass} value={home.worksEyebrow} onChange={(event) => onChange({ ...home, worksEyebrow: event.target.value })} />
           </Field>
-          <Field label="Section title">
+          <Field label="Works subtitle">
             <input className={inputClass} value={home.worksTitle} onChange={(event) => onChange({ ...home, worksTitle: event.target.value })} />
           </Field>
           <Field label="Link text">
@@ -721,10 +722,10 @@ function HomeForm({
       <section className="space-y-4">
         <h2 className="text-sm uppercase text-muted">Notes section</h2>
         <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Small label">
+          <Field label="Notes heading">
             <input className={inputClass} value={home.notesEyebrow} onChange={(event) => onChange({ ...home, notesEyebrow: event.target.value })} />
           </Field>
-          <Field label="Section title">
+          <Field label="Notes subtitle">
             <input className={inputClass} value={home.notesTitle} onChange={(event) => onChange({ ...home, notesTitle: event.target.value })} />
           </Field>
           <Field label="Link text">
@@ -778,6 +779,7 @@ function ModuleList({ modules, onChange }: { modules: ContentModule[]; onChange:
         >
           <option value="">Add module...</option>
           <option value="paragraph">Paragraph</option>
+          <option value="heading">Section heading</option>
           <option value="poem">Poem / preserved line breaks</option>
           <option value="note">Note block</option>
           <option value="image">Image</option>
@@ -818,6 +820,7 @@ function ModuleList({ modules, onChange }: { modules: ContentModule[]; onChange:
 
 function ModuleFields({ module, onChange }: { module: ContentModule; onChange: (module: ContentModule) => void }) {
   switch (module.kind) {
+    case "heading":
     case "paragraph":
     case "poem":
     case "quote":

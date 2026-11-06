@@ -11,6 +11,10 @@ export type ImageItem = {
 
 export type ContentModule =
   | {
+      kind: "heading";
+      text: string;
+    }
+  | {
       kind: "paragraph";
       text: string;
     }

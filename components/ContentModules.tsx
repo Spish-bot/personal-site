@@ -1,101 +1,58 @@
 import type { ContentModule } from "@/lib/types";
+import { PhotoGallery } from "@/components/PhotoGallery";
 
-type ContentModulesProps = {
-  modules: ContentModule[];
-};
-
-export function ContentModules({ modules }: ContentModulesProps) {
+export function ContentModules({ modules }: { modules: ContentModule[] }) {
   return (
-    <div className="space-y-10">
+    <div className="content-modules">
       {modules.map((module, index) => {
         switch (module.kind) {
           case "paragraph":
-            return (
-              <p key={index} className="content-text">
-                {module.text}
-              </p>
-            );
+            return module.text.trim() ? <p key={index} className="content-text">{module.text}</p> : null;
+          case "heading":
+            return <h2 key={index} className="content-heading">{module.text}</h2>;
           case "poem":
-            return (
-              <div key={index} className="whitespace-pre-line font-serif text-lg leading-loose text-ink md:text-xl">
-                {module.text}
-              </div>
-            );
+            return <div key={index} className="poem-text">{module.text}</div>;
           case "image":
             return (
-              <figure key={index} className="space-y-3">
-                <img src={module.src} alt={module.alt} className="w-full object-cover" />
+              <figure key={index} className="content-image">
+                <img src={module.src.trim()} alt={module.alt} loading="lazy" />
                 {module.caption ? <figcaption>{module.caption}</figcaption> : null}
               </figure>
             );
           case "gallery":
-            return (
-              <div key={index} className="grid gap-4 sm:grid-cols-2">
-                {module.images.map((image) => (
-                  <figure key={image.src} className="space-y-3">
-                    <img src={image.src} alt={image.alt} className="aspect-[4/3] w-full object-cover" />
-                    {image.caption ? <figcaption>{image.caption}</figcaption> : null}
-                  </figure>
-                ))}
-              </div>
-            );
+            return <PhotoGallery key={index} images={module.images} />;
           case "yearGallery":
             return (
-              <section key={index} className="border-t border-line pt-7">
-                <div className="mb-6">
-                  <h2 className="text-2xl font-normal text-ink">{module.year}</h2>
-                  {module.note ? <p className="mt-3 text-sm leading-7 text-muted">{module.note}</p> : null}
+              <section key={index}>
+                <div className="gallery-year-heading">
+                  <h2>{module.year}</h2>
+                  <span className="meta">{String(module.images.length).padStart(2, "0")} 张</span>
+                  {module.note ? <p>{module.note}</p> : null}
                 </div>
-                {module.images.length ? (
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {module.images.map((image) => (
-                      <figure key={image.src} className="space-y-3">
-                        <img src={image.src} alt={image.alt} className="aspect-[4/3] w-full object-cover" />
-                        {image.caption ? <figcaption>{image.caption}</figcaption> : null}
-                      </figure>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm leading-7 text-soft">这一年的街头照片还没有放进来。</p>
-                )}
+                {module.images.length ? <PhotoGallery images={module.images} /> : <p className="empty-state">这一年的街头照片还没有放进来。</p>}
               </section>
             );
           case "video":
             return (
-              <figure key={index} className="space-y-3">
-                <div className="aspect-video w-full overflow-hidden border border-line bg-white">
-                  <iframe
-                    src={module.url}
-                    title={module.caption ?? "Embedded video"}
-                    className="h-full w-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
+              <figure key={index} className="content-image">
+                <iframe src={module.url} title={module.caption || "视频"} className="content-video" loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
                 {module.caption ? <figcaption>{module.caption}</figcaption> : null}
               </figure>
             );
           case "quote":
-            return (
-              <blockquote key={index} className="border-l border-line pl-5 font-serif text-xl leading-relaxed text-muted">
-                {module.text}
-              </blockquote>
-            );
+            return <blockquote key={index} className="content-text content-quote">{module.text}</blockquote>;
           case "note":
             return (
-              <aside key={index} className="border-y border-line py-6">
-                {module.title ? <h2 className="mb-3 text-sm uppercase text-muted">{module.title}</h2> : null}
+              <aside key={index} className="content-note">
+                {module.title ? <h2>{module.title}</h2> : null}
                 <p className="content-text">{module.text}</p>
               </aside>
             );
           case "links":
             return (
-              <div key={index} className="flex flex-wrap gap-4 text-sm">
-                {module.items.map((item) => (
-                  <a key={item.href} href={item.href} className="quiet-link pb-1 text-ink">
-                    {item.label}
-                  </a>
-                ))}
+              <div key={index} className="content-links">
+                {module.items.map((item) => <a key={item.href} href={item.href} className="quiet-link">{item.label}</a>)}
               </div>
             );
           case "divider":

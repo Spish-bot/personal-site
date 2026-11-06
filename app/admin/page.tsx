@@ -1,28 +1,17 @@
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { AdminEditor } from "@/components/AdminEditor";
-import { PageIntro } from "@/components/PageIntro";
 
-export const metadata = {
-  title: "Admin"
-};
+export const metadata = { title: "Admin", robots: { index: false, follow: false } };
 
 export default function AdminPage() {
   return (
-    <main className="mx-auto w-full max-w-6xl px-5 py-14 md:px-8 md:py-20">
-      <PageIntro eyebrow="Admin" title="Local content editor">
-        <p>这个页面用于本地维护内容：新增、删除、编辑作品和随想，也可以修改 About。保存后刷新公开页面即可预览。</p>
-      </PageIntro>
-
+    <main id="main-content" className="site-width archive-page">
+      <header className="archive-heading">
+        <div><p className="meta accent">Local editor</p><h1>内容编辑</h1></div>
+        <Link href="/" target="_blank" rel="noopener noreferrer" className="text-link">预览首页<ArrowUpRight size={16} aria-hidden="true" /></Link>
+      </header>
       <AdminEditor />
-
-      <p className="mt-8 max-w-2xl text-sm leading-7 text-muted">
-        保存只会更新本地 <span className="font-mono text-ink">content</span> 文件。确认满意后，再用 Git 上传到 GitHub / Netlify。
-        公开页面只显示 <span className="font-mono text-ink">published</span> 的作品和随想。
-      </p>
-
-      <Link href="/" className="mt-10 inline-block border-b border-line pb-1 text-sm hover:border-ink">
-        Back home
-      </Link>
     </main>
   );
 }

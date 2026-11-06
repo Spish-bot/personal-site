@@ -1,35 +1,44 @@
 import Link from "next/link";
-import { PageIntro } from "@/components/PageIntro";
-import { formatDate, getPublishedNotes } from "@/lib/content";
+import { ArrowUpRight } from "lucide-react";
+import { getPublishedNotes } from "@/lib/content";
+import type { Note } from "@/lib/types";
 
-export const metadata = {
-  title: "Notes"
-};
+export const metadata = { title: "Notes" };
 
 export default function NotesPage() {
   const notes = getPublishedNotes();
+  const years = new Map<string, Note[]>();
+  notes.forEach((note) => {
+    const year = note.date.slice(0, 4);
+    years.set(year, [...(years.get(year) ?? []), note]);
+  });
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-5 py-14 md:px-8 md:py-20">
-      <PageIntro eyebrow="Notes" title="Fragments, observations, and daily writing">
-        <p>Short texts, long texts, images, and records that do not need to become formal essays.</p>
-      </PageIntro>
-
-      <div className="reading-width divide-y divide-line border-y border-line">
-        {notes.map((note) => (
-          <Link key={note.slug} href={`/notes/${note.slug}`} className="block py-8 hover:text-muted">
-            <article className="grid gap-3 md:grid-cols-[8rem_1fr]">
-              <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-soft md:block">
-                <time dateTime={note.date}>{formatDate(note.date)}</time>
-                {note.tags?.length ? <span className="md:mt-2 md:block">{note.tags.join(" / ")}</span> : null}
-              </div>
-              <div>
-                <h2 className="text-2xl font-normal leading-snug text-ink">{note.title}</h2>
-                <p className="mt-4 leading-7 text-muted">{note.summary}</p>
-              </div>
-            </article>
-          </Link>
+    <main id="main-content" className="site-width archive-page notes-page">
+      <header className="archive-heading">
+        <div><p className="section-label">随想</p><h1>Notes<span className="wordmark-period" aria-hidden="true">*</span></h1></div>
+        <div className="archive-aside"><span className="meta">{String(notes.length).padStart(2, "0")} 篇记录</span></div>
+      </header>
+      <div className="notes-archive">
+        {Array.from(years, ([year, entries]) => (
+          <section key={year} className="archive-group">
+            <h2 className="archive-year">{year}</h2>
+            <div className="year-entries">
+              {entries.map((note) => (
+                <Link key={note.slug} href={"/notes/" + note.slug} className="note-index-entry">
+                  <time className="meta" dateTime={note.date}>{note.date.slice(5).replace("-", ".")}</time>
+                  <div>
+                    <h3>{note.title}</h3>
+                    {note.summary ? <p className="entry-summary">{note.summary}</p> : null}
+                    {note.tags?.length ? <p className="meta">{note.tags.join(" / ")}</p> : null}
+                  </div>
+                  <ArrowUpRight size={18} aria-hidden="true" />
+                </Link>
+              ))}
+            </div>
+          </section>
         ))}
+        {!notes.length ? <p className="empty-state">暂无笔记。</p> : null}
       </div>
     </main>
   );

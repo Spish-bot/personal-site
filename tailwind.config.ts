@@ -18,14 +18,15 @@ const config: Config = {
           "Segoe UI",
           "sans-serif"
         ],
-        serif: ["Georgia", "Times New Roman", "serif"]
+        serif: ["Georgia", "Songti SC", "STSong", "Noto Serif CJK SC", "SimSun", "serif"]
       },
       colors: {
-        paper: "#fbfaf7",
-        ink: "#24231f",
-        muted: "#747069",
-        soft: "#9b968c",
-        line: "#e9e4dc"
+        paper: "#ffffff",
+        ink: "#262724",
+        muted: "#656860",
+        soft: "#777b73",
+        line: "#e3e5df",
+        accent: "#8f3439"
       }
     }
   },
