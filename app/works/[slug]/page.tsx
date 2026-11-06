@@ -26,7 +26,7 @@ export default function WorkDetailPage({ params }: Props) {
     <main id="main-content" className="site-width detail-page">
       <ReadingProgress />
       <Link href="/works" className="text-link back-link"><ArrowLeft size={14} aria-hidden="true" />Works</Link>
-      <article className={"reading-article" + (isPhotographic ? " wide-article" : "")}>
+      <article className={"reading-article" + (isPhotographic ? " wide-article" : "") + (work.slug === "untitled-wind-poem" ? " short-work" : "")}>
         <header className="article-heading">
           <div className="article-meta meta">
             {work.year ? <span>{work.year}</span> : null}

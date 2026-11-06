@@ -204,6 +204,7 @@ a.practice-entry:hover h2 { color: var(--accent); }
 .quiet-link:hover { border-color: var(--accent); }
 .border-line { border: 0; border-top: 1px solid var(--line); }
 .reading-footer { margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--ink); display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.short-work .reading-footer { margin-top: 144px; }
 .reading-footer a { display: grid; gap: 12px; }
 .reading-footer a:last-child { text-align: right; grid-column: 2; }
 .reading-footer .adjacent-title { font: 20px/1.6 var(--serif); }
