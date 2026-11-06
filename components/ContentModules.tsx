@@ -12,6 +12,8 @@ export function ContentModules({ modules }: { modules: ContentModule[] }) {
             return <h2 key={index} className="content-heading">{module.text}</h2>;
           case "poem":
             return <div key={index} className="poem-text">{module.text}</div>;
+          case "date":
+            return module.text.trim() ? <p key={index} className="content-date">{module.text}</p> : null;
           case "image":
             return (
               <figure key={index} className="content-image">

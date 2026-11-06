@@ -1,9 +1,10 @@
 import aboutData from "@/content/about.json";
 import homeData from "@/content/home.json";
 import notesData from "@/content/notes.json";
+import practiceData from "@/content/practice.json";
 import secretData from "@/content/secret.json";
 import worksData from "@/content/works.json";
-import type { About, Home, Note, Secret, Work } from "@/lib/types";
+import type { About, Home, Note, PracticeEntry, Secret, Work } from "@/lib/types";
 
 export const about = aboutData as About;
 export const home = homeData as Home;
@@ -24,6 +25,17 @@ export function getWork(slug: string): Work | undefined {
   return getPublishedWorks().find((work) => work.slug === slug);
 }
 
+export function getSeries(work: Work, slug: string) {
+  return work.album?.series.find((series) => series.published && series.slug === slug);
+}
+
+export function getWorkExcerpt(work: Work) {
+  const textModule = work.modules.find((item) =>
+    (item.kind === "paragraph" || item.kind === "poem" || item.kind === "quote") && item.text.trim()
+  );
+  return textModule && "text" in textModule ? textModule.text : "";
+}
+
 export function getPublishedNotes(): Note[] {
   return (notesData as Note[])
     .filter((note) => note.published)
@@ -34,26 +46,16 @@ export function getNote(slug: string): Note | undefined {
   return getPublishedNotes().find((note) => note.slug === slug);
 }
 
-export function getPublishedSecretEntries(): Note[] {
-  return (secret.entries as Note[])
+export function getPublishedPractice(): PracticeEntry[] {
+  return (practiceData as PracticeEntry[])
     .filter((entry) => entry.published)
     .sort((a, b) => b.date.localeCompare(a.date));
 }
 
-export function getRecentUpdates() {
-  const works = getPublishedWorks().slice(0, 2).map((work) => ({
-    title: work.title,
-    href: `/works/${work.slug}`,
-    meta: `${work.year} / ${work.type.join(", ")}`
-  }));
-
-  const notes = getPublishedNotes().slice(0, 3).map((note) => ({
-    title: note.title,
-    href: `/notes/${note.slug}`,
-    meta: formatDate(note.date)
-  }));
-
-  return [...notes, ...works].slice(0, 5);
+export function getPublishedSecretEntries(): Note[] {
+  return (secret.entries as Note[])
+    .filter((entry) => entry.published)
+    .sort((a, b) => b.date.localeCompare(a.date));
 }
 
 export function formatDate(date: string) {

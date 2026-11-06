@@ -6,8 +6,9 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 
 const items = [
   { href: "/works", label: "Works" },
-  { href: "/notes", label: "Notes" },
-  { href: "/about", label: "About" }
+  { href: "/practice", label: "Practice" },
+  { href: "/about", label: "About" },
+  { href: "/notes", label: "Notes" }
 ];
 
 export function SiteNavigation() {

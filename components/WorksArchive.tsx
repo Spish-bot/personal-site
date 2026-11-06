@@ -5,7 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 import type { Work } from "@/lib/types";
 
-type Preview = Pick<Work, "slug" | "title" | "subtitle" | "year" | "type" | "summary" | "cover">;
+type Preview = Pick<Work, "slug" | "title" | "subtitle" | "year" | "type" | "length" | "tags" | "summary" | "cover">;
 const genreLabels: Record<string, string> = { Poetry: "诗歌", Novel: "小说", Prose: "散文", Photography: "摄影", Writing: "文字", Film: "影像" };
 
 export function WorksArchive({ works }: { works: Preview[] }) {
@@ -35,21 +35,20 @@ export function WorksArchive({ works }: { works: Preview[] }) {
           <h2 className={year ? "archive-year" : "archive-year archive-year-label"}>{year || "未标年份"}</h2>
           <div className="year-entries">
             {items.map((work) => (
-              <Link key={work.slug} href={"/works/" + work.slug} className="archive-entry">
+              <Link key={work.slug} href={"/works/" + work.slug} className={`archive-entry${work.cover?.trim() ? "" : " no-cover"}`}>
                 <div className="archive-entry-copy">
-                  <p className="meta entry-type">{work.type.join(" / ")}</p>
+                  <p className="meta entry-type">{[work.type.join(" / "), work.length, work.tags?.join(" / ")].filter(Boolean).join(" · ")}</p>
                   <h3>{work.title}</h3>
                   {work.subtitle ? <p className="entry-subtitle">{work.subtitle}</p> : null}
                   {work.summary ? <p className="entry-summary">{work.summary}</p> : null}
                 </div>
-                {work.cover?.trim() ? <img className="archive-cover" src={work.cover.trim()} alt="" width="180" height="124" loading="lazy" /> : <span className="archive-text-mark" aria-hidden="true" />}
+                {work.cover?.trim() ? <img className="archive-cover" src={work.cover.trim()} alt="" width="180" height="124" loading="lazy" /> : null}
                 <ArrowUpRight className="entry-arrow" size={18} aria-hidden="true" />
               </Link>
             ))}
           </div>
         </section>
       ))}
-      {!visible.length ? <p className="empty-state">暂无作品。</p> : null}
     </>
   );
 }

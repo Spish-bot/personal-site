@@ -8,7 +8,7 @@ export default function AboutPage() {
     <main id="main-content" className="site-width about-page">
       <header className="about-heading">
         <p className="section-label">About</p>
-        <h1>{about.name}<span className="wordmark-period" aria-hidden="true">*</span></h1>
+        <h1>{about.name}</h1>
         <p>{about.description}</p>
       </header>
       <div className="about-layout">

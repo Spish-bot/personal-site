@@ -1,52 +1,26 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import type { About, ContentModule, Home, ImageItem, LinkItem, Note, Secret, Work } from "@/lib/types";
+import { AlbumEditor } from "@/components/AlbumEditor";
+import { ImagePreviewGrid, ImageUploader } from "@/components/ImageUploader";
+import type { About, ContentModule, Home, ImageItem, LinkItem, Note, PracticeEntry, Secret, Work } from "@/lib/types";
 
 type AdminData = {
   about: About;
   home: Home;
   works: Work[];
   notes: Note[];
+  practice: PracticeEntry[];
   secret: Secret;
 };
 
-type Section = "home" | "notes" | "works" | "secret" | "about";
-type UploadedImage = {
-  src: string;
-  alt: string;
-};
+type Section = "home" | "works" | "notes" | "practice" | "about" | "secret";
 
-const emptyAbout: About = {
-  name: "",
-  description: "",
-  intro: [""],
-  images: [],
-  links: []
-};
-
-const emptyHome: Home = {
-  eyebrow: "",
-  portrait: { src: "", alt: "" },
-  aboutLabel: "About",
-  aboutText: "",
-  worksEyebrow: "Works",
-  worksTitle: "",
-  worksLinkLabel: "All works",
-  worksCount: 2,
-  notesEyebrow: "Notes",
-  notesTitle: "",
-  notesLinkLabel: "All notes",
-  notesCount: 4
-};
+const emptyAbout: About = { name: "", description: "", intro: [""], images: [], links: [] };
+const emptyHome: Home = { worksCount: 4 };
 
 function slugify(value: string) {
-  return value
-    .trim()
-    .toLowerCase()
-    .replace(/['"]/g, "")
-    .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  return value.trim().toLowerCase().replace(/['"]/g, "").replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "");
 }
 
 function today() {
@@ -58,10 +32,7 @@ function listToText(items?: string[]) {
 }
 
 function textToList(value: string) {
-  return value
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
+  return value.split(",").map((item) => item.trim()).filter(Boolean);
 }
 
 function linksToText(items?: LinkItem[]) {
@@ -69,15 +40,10 @@ function linksToText(items?: LinkItem[]) {
 }
 
 function textToLinks(value: string): LinkItem[] {
-  return value
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const [label = "", href = ""] = line.split("|").map((part) => part.trim());
-      return { label, href };
-    })
-    .filter((item) => item.label || item.href);
+  return value.split("\n").map((line) => line.trim()).filter(Boolean).map((line) => {
+    const [label = "", href = ""] = line.split("|").map((part) => part.trim());
+    return { label, href };
+  }).filter((item) => item.label || item.href);
 }
 
 function imagesToText(items?: ImageItem[]) {
@@ -85,68 +51,43 @@ function imagesToText(items?: ImageItem[]) {
 }
 
 function textToImages(value: string): ImageItem[] {
-  return value
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const [src = "", alt = "", caption = ""] = line.split("|").map((part) => part.trim());
-      return { src, alt, ...(caption ? { caption } : {}) };
-    })
-    .filter((item) => item.src || item.alt);
+  return value.split("\n").map((line) => line.trim()).filter(Boolean).map((line) => {
+    const [src = "", alt = "", caption = ""] = line.split("|").map((part) => part.trim());
+    return { src, alt, ...(caption ? { caption } : {}) };
+  }).filter((item) => item.src || item.alt);
 }
 
 function makeModule(kind: ContentModule["kind"]): ContentModule {
   switch (kind) {
-    case "image":
-      return { kind, src: "", alt: "", caption: "" };
-    case "gallery":
-      return { kind, images: [] };
-    case "yearGallery":
-      return { kind, year: String(new Date().getFullYear()), note: "", images: [] };
-    case "video":
-      return { kind, url: "", caption: "" };
-    case "note":
-      return { kind, title: "", text: "" };
-    case "links":
-      return { kind, items: [] };
-    case "divider":
-      return { kind };
+    case "image": return { kind, src: "", alt: "", caption: "" };
+    case "gallery": return { kind, images: [] };
+    case "yearGallery": return { kind, year: String(new Date().getFullYear()), note: "", images: [] };
+    case "video": return { kind, url: "", caption: "" };
+    case "note": return { kind, title: "", text: "" };
+    case "links": return { kind, items: [] };
+    case "divider": return { kind };
     case "poem":
     case "quote":
     case "paragraph":
-    default:
-      return { kind, text: "" };
+    default: return { kind, text: "" };
   }
 }
 
-function Field({
-  label,
-  children
-}: {
-  label: string;
-  children: ReactNode;
-}) {
-  return (
-    <label className="block space-y-2">
-      <span className="text-xs uppercase tracking-wide text-muted">{label}</span>
-      {children}
-    </label>
-  );
+function Field({ label, children }: { label: string; children: ReactNode }) {
+  return <label className="block space-y-2"><span className="text-xs uppercase tracking-wide text-muted">{label}</span>{children}</label>;
 }
 
-const inputClass =
-  "w-full border border-line bg-white px-3 py-2 text-sm text-ink outline-none transition focus:border-ink";
-const textareaClass =
-  "min-h-28 w-full border border-line bg-white px-3 py-2 text-sm leading-7 text-ink outline-none transition focus:border-ink";
-const buttonClass = "border border-line px-3 py-2 text-sm text-ink hover:border-ink disabled:opacity-40";
-const primaryButtonClass = "border border-ink bg-ink px-4 py-2 text-sm text-white disabled:opacity-40";
+const inputClass = "w-full border border-line bg-white px-3 py-2 text-sm text-ink outline-none transition focus:border-ink";
+const textareaClass = "min-h-28 w-full border border-line bg-white px-3 py-2 text-sm leading-7 text-ink outline-none transition focus:border-ink";
+const buttonClass = "min-h-11 border border-line px-3 py-2 text-sm text-ink hover:border-ink disabled:opacity-40";
+const primaryButtonClass = "min-h-11 border border-ink bg-ink px-4 py-2 text-sm text-white disabled:opacity-40";
 
 export function AdminEditor() {
   const [section, setSection] = useState<Section>("home");
   const [data, setData] = useState<AdminData | null>(null);
   const [selectedWork, setSelectedWork] = useState(0);
   const [selectedNote, setSelectedNote] = useState(0);
+  const [selectedPractice, setSelectedPractice] = useState(0);
   const [selectedSecretEntry, setSelectedSecretEntry] = useState(0);
   const [status, setStatus] = useState("Loading local content...");
   const [dirty, setDirty] = useState(false);
@@ -168,9 +109,10 @@ export function AdminEditor() {
     if (!data) return null;
     if (section === "works") return data.works[selectedWork] ?? null;
     if (section === "notes") return data.notes[selectedNote] ?? null;
+    if (section === "practice") return data.practice[selectedPractice] ?? null;
     if (section === "secret") return data.secret.entries[selectedSecretEntry] ?? null;
     return null;
-  }, [data, section, selectedNote, selectedSecretEntry, selectedWork]);
+  }, [data, section, selectedNote, selectedPractice, selectedSecretEntry, selectedWork]);
 
   function updateData(nextData: AdminData) {
     setData(nextData);
@@ -180,29 +122,33 @@ export function AdminEditor() {
   async function save() {
     if (!data) return;
     setStatus("Saving...");
-    const response = await fetch("/api/admin/content", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-    if (!response.ok) {
-      const body = await response.json();
-      setStatus(body.message ?? "Save failed.");
-      return;
+    try {
+      const response = await fetch("/api/admin/content", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) {
+        const body = await response.json();
+        setStatus(body.message ?? "Save failed.");
+        return;
+      }
+      setDirty(false);
+      setStatus("Saved. Refresh the public pages to preview the latest local content.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Save failed.");
     }
-    setDirty(false);
-    setStatus("Saved. Refresh the public pages to preview the latest local content.");
   }
 
   function addWork() {
     if (!data) return;
     const next: Work = {
-      slug: `new-work-${Date.now()}`,
-      title: "Untitled work",
+      slug: `work-${Date.now()}`,
+      title: "",
       year: String(new Date().getFullYear()),
       type: ["Writing"],
       summary: "",
-      published: true,
+      published: false,
       modules: [{ kind: "paragraph", text: "" }]
     };
     updateData({ ...data, works: [next, ...data.works] });
@@ -212,142 +158,83 @@ export function AdminEditor() {
 
   function addNote() {
     if (!data) return;
-    const next: Note = {
-      slug: `new-note-${Date.now()}`,
-      title: "Untitled note",
-      date: today(),
-      summary: "",
-      tags: [],
-      published: true,
-      modules: [{ kind: "paragraph", text: "" }]
-    };
+    const next: Note = { slug: `note-${Date.now()}`, title: "", date: today(), summary: "", tags: [], published: false, modules: [{ kind: "paragraph", text: "" }] };
     updateData({ ...data, notes: [next, ...data.notes] });
     setSelectedNote(0);
     setSection("notes");
   }
 
+  function addPractice() {
+    if (!data) return;
+    const next: PracticeEntry = { id: `practice-${Date.now()}`, title: "", date: today(), published: false };
+    updateData({ ...data, practice: [next, ...data.practice] });
+    setSelectedPractice(0);
+    setSection("practice");
+  }
+
   function addSecretEntry() {
     if (!data) return;
-    const next: Note = {
-      slug: `secret-${Date.now()}`,
-      title: "Untitled secret",
-      date: today(),
-      summary: "",
-      tags: ["hidden"],
-      published: true,
-      modules: [{ kind: "paragraph", text: "" }]
-    };
+    const next: Note = { slug: `secret-${Date.now()}`, title: "", date: today(), summary: "", tags: ["hidden"], published: false, modules: [{ kind: "paragraph", text: "" }] };
     updateData({ ...data, secret: { ...data.secret, entries: [next, ...data.secret.entries] } });
     setSelectedSecretEntry(0);
     setSection("secret");
   }
 
   function deleteWork(index: number) {
-    if (!data) return;
-    const item = data.works[index];
-    if (!item || !window.confirm(`确定删除《${item.title}》吗？`)) return;
-    const works = data.works.filter((_, itemIndex) => itemIndex !== index);
-    updateData({ ...data, works });
+    if (!data || !window.confirm("Delete selected work?")) return;
+    updateData({ ...data, works: data.works.filter((_, itemIndex) => itemIndex !== index) });
     setSelectedWork(Math.max(0, index - 1));
   }
 
   function deleteNote(index: number) {
-    if (!data) return;
-    const item = data.notes[index];
-    if (!item || !window.confirm(`确定删除《${item.title}》吗？`)) return;
-    const notes = data.notes.filter((_, itemIndex) => itemIndex !== index);
-    updateData({ ...data, notes });
+    if (!data || !window.confirm("Delete selected note?")) return;
+    updateData({ ...data, notes: data.notes.filter((_, itemIndex) => itemIndex !== index) });
     setSelectedNote(Math.max(0, index - 1));
   }
 
+  function deletePractice(index: number) {
+    if (!data || !window.confirm("Delete selected entry?")) return;
+    updateData({ ...data, practice: data.practice.filter((_, itemIndex) => itemIndex !== index) });
+    setSelectedPractice(Math.max(0, index - 1));
+  }
+
   function deleteSecretEntry(index: number) {
-    if (!data) return;
-    const item = data.secret.entries[index];
-    if (!item || !window.confirm(`确定删除《${item.title}》吗？`)) return;
-    const entries = data.secret.entries.filter((_, itemIndex) => itemIndex !== index);
-    updateData({ ...data, secret: { ...data.secret, entries } });
+    if (!data || !window.confirm("Delete selected entry?")) return;
+    updateData({ ...data, secret: { ...data.secret, entries: data.secret.entries.filter((_, itemIndex) => itemIndex !== index) } });
     setSelectedSecretEntry(Math.max(0, index - 1));
   }
 
-  function updateWork(index: number, nextWork: Work) {
-    if (!data) return;
-    updateData({ ...data, works: data.works.map((work, itemIndex) => (itemIndex === index ? nextWork : work)) });
-  }
-
-  function updateNote(index: number, nextNote: Note) {
-    if (!data) return;
-    updateData({ ...data, notes: data.notes.map((note, itemIndex) => (itemIndex === index ? nextNote : note)) });
-  }
-
-  function updateSecretEntry(index: number, nextEntry: Note) {
-    if (!data) return;
-    updateData({
-      ...data,
-      secret: {
-        ...data.secret,
-        entries: data.secret.entries.map((entry, itemIndex) => (itemIndex === index ? nextEntry : entry))
-      }
-    });
-  }
-
-  function updateSecret(nextSecret: Secret) {
-    if (!data) return;
-    updateData({ ...data, secret: nextSecret });
-  }
-
-  function updateAbout(nextAbout: About) {
-    if (!data) return;
-    updateData({ ...data, about: nextAbout });
-  }
-
-  function updateHome(nextHome: Home) {
-    if (!data) return;
-    updateData({ ...data, home: nextHome });
-  }
-
-  if (!data) {
-    return <p className="border-y border-line py-8 text-sm text-muted">{status}</p>;
-  }
+  if (!data) return <p className="border-y border-line py-8 text-sm text-muted">{status}</p>;
 
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-3 border-y border-line py-4">
         <div className="flex flex-wrap gap-2" role="group" aria-label="编辑页面">
-          {(["home", "notes", "works", "secret", "about"] as Section[]).map((item) => (
-            <button
-              key={item}
-              type="button"
-              aria-pressed={section === item}
-              onClick={() => setSection(item)}
-              className={section === item ? primaryButtonClass : buttonClass}
-            >
-              {item === "home"
-                ? "Home"
-                : item === "notes"
-                  ? "Notes"
-                  : item === "works"
-                    ? "Works"
-                    : item === "secret"
-                      ? "Secret"
-                      : "About"}
+          {(["home", "works", "notes", "practice", "about", "secret"] as Section[]).map((item) => (
+            <button key={item} type="button" aria-pressed={section === item} onClick={() => setSection(item)} className={section === item ? primaryButtonClass : buttonClass}>
+              {item[0].toUpperCase() + item.slice(1)}
             </button>
           ))}
         </div>
         <div className="flex items-center gap-3">
           <p className="text-sm text-muted">{dirty ? "Unsaved changes" : status}</p>
-          <button type="button" onClick={save} className={primaryButtonClass} disabled={!dirty}>
-            Save to local files
-          </button>
+          <button type="button" onClick={save} className={primaryButtonClass} disabled={!dirty}>Save to local files</button>
         </div>
       </div>
 
-      {section === "home" ? (
-        <HomeForm
-          home={data.home ?? emptyHome}
-          about={data.about ?? emptyAbout}
-          onChange={updateHome}
-          onChangeAbout={updateAbout}
-        />
+      {section === "home" ? <HomeForm home={data.home ?? emptyHome} onChange={(home) => updateData({ ...data, home })} /> : null}
+
+      {section === "works" ? (
+        <TwoColumnEditor
+          title="Works"
+          onAdd={addWork}
+          items={data.works.map((work) => ({ title: work.title, meta: work.year, published: work.published }))}
+          selected={selectedWork}
+          onSelect={setSelectedWork}
+          onDelete={deleteWork}
+        >
+          {selectedItem ? <WorkForm work={selectedItem as Work} yearOptions={getWorkYearOptions(data.works)} onChange={(work) => updateData({ ...data, works: data.works.map((item, index) => index === selectedWork ? work : item) })} /> : <EmptyState label="No work selected." />}
+        </TwoColumnEditor>
       ) : null}
 
       {section === "notes" ? (
@@ -359,34 +246,24 @@ export function AdminEditor() {
           onSelect={setSelectedNote}
           onDelete={deleteNote}
         >
-          {selectedItem ? (
-            <NoteForm note={selectedItem as Note} onChange={(note) => updateNote(selectedNote, note)} />
-          ) : (
-            <EmptyState label="No note selected." />
-          )}
+          {selectedItem ? <NoteForm note={selectedItem as Note} onChange={(note) => updateData({ ...data, notes: data.notes.map((item, index) => index === selectedNote ? note : item) })} /> : <EmptyState label="No note selected." />}
         </TwoColumnEditor>
       ) : null}
 
-      {section === "works" ? (
+      {section === "practice" ? (
         <TwoColumnEditor
-          title="Works"
-          onAdd={addWork}
-          items={data.works.map((work) => ({ title: work.title, meta: work.year, published: work.published }))}
-          selected={selectedWork}
-          onSelect={setSelectedWork}
-          onDelete={deleteWork}
+          title="Practice"
+          onAdd={addPractice}
+          items={data.practice.map((entry) => ({ title: entry.title, meta: entry.date, published: entry.published }))}
+          selected={selectedPractice}
+          onSelect={setSelectedPractice}
+          onDelete={deletePractice}
         >
-          {selectedItem ? (
-            <WorkForm
-              work={selectedItem as Work}
-              yearOptions={getWorkYearOptions(data.works)}
-              onChange={(work) => updateWork(selectedWork, work)}
-            />
-          ) : (
-            <EmptyState label="No work selected." />
-          )}
+          {selectedItem ? <PracticeForm entry={selectedItem as PracticeEntry} onChange={(entry) => updateData({ ...data, practice: data.practice.map((item, index) => index === selectedPractice ? entry : item) })} /> : <EmptyState label="No entry selected." />}
         </TwoColumnEditor>
       ) : null}
+
+      {section === "about" ? <AboutForm about={data.about ?? emptyAbout} onChange={(about) => updateData({ ...data, about })} /> : null}
 
       {section === "secret" ? (
         <SecretEditor
@@ -396,12 +273,10 @@ export function AdminEditor() {
           onSelect={setSelectedSecretEntry}
           onAdd={addSecretEntry}
           onDelete={deleteSecretEntry}
-          onChangeSecret={updateSecret}
-          onChangeEntry={(entry) => updateSecretEntry(selectedSecretEntry, entry)}
+          onChangeSecret={(secret) => updateData({ ...data, secret })}
+          onChangeEntry={(entry) => updateData({ ...data, secret: { ...data.secret, entries: data.secret.entries.map((item, index) => index === selectedSecretEntry ? entry : item) } })}
         />
       ) : null}
-
-      {section === "about" ? <AboutForm about={data.about ?? emptyAbout} onChange={updateAbout} /> : null}
     </div>
   );
 }
@@ -426,32 +301,16 @@ function TwoColumnEditor({
   return (
     <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
       <aside className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm uppercase text-muted">{title}</h2>
-          <button type="button" onClick={onAdd} className={buttonClass}>
-            New
-          </button>
-        </div>
+        <div className="flex items-center justify-between"><h2 className="text-sm uppercase text-muted">{title}</h2><button type="button" onClick={onAdd} className={buttonClass}>New</button></div>
         <div className="divide-y divide-line border-y border-line">
           {items.map((item, index) => (
-            <button
-              key={`${item.title}-${item.meta}-${index}`}
-              type="button"
-              onClick={() => onSelect(index)}
-              className={`block w-full px-3 py-4 text-left ${selected === index ? "bg-white" : ""}`}
-            >
-              <span className="block text-sm text-ink">{item.title}</span>
-              <span className="mt-1 block text-xs uppercase text-muted">
-                {item.meta} / {item.published ? "Published" : "Draft"}
-              </span>
+            <button key={`${item.title}-${item.meta}-${index}`} type="button" onClick={() => onSelect(index)} className={`block w-full px-3 py-4 text-left ${selected === index ? "bg-white" : ""}`}>
+              <span className="block text-sm text-ink">{item.title || "Untitled"}</span>
+              <span className="mt-1 block text-xs uppercase text-muted">{item.meta} / {item.published ? "Published" : "Draft"}</span>
             </button>
           ))}
         </div>
-        {items[selected] ? (
-          <button type="button" onClick={() => onDelete(selected)} className="text-sm text-muted hover:text-ink">
-            Delete selected
-          </button>
-        ) : null}
+        {items[selected] ? <button type="button" onClick={() => onDelete(selected)} className="min-h-11 text-sm text-muted hover:text-ink">Delete selected</button> : null}
       </aside>
       <section>{children}</section>
     </div>
@@ -465,69 +324,36 @@ function getWorkYearOptions(works: Work[]) {
   return Array.from(new Set([...existingYears, ...nearbyYears, ""]));
 }
 
-function WorkForm({
-  work,
-  yearOptions,
-  onChange
-}: {
-  work: Work;
-  yearOptions: string[];
-  onChange: (work: Work) => void;
-}) {
+function WorkForm({ work, yearOptions, onChange }: { work: Work; yearOptions: string[]; onChange: (work: Work) => void }) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2">
-        <Field label="Title">
-          <input className={inputClass} value={work.title} onChange={(event) => onChange({ ...work, title: event.target.value })} />
-        </Field>
-        <Field label="Subtitle, optional">
-          <input className={inputClass} value={work.subtitle ?? ""} onChange={(event) => onChange({ ...work, subtitle: event.target.value || undefined })} />
-        </Field>
-        <Field label="Slug">
-          <input className={inputClass} value={work.slug} onChange={(event) => onChange({ ...work, slug: slugify(event.target.value) })} />
-        </Field>
+        <Field label="Title"><input className={inputClass} value={work.title} onChange={(event) => onChange({ ...work, title: event.target.value })} /></Field>
+        <Field label="Subtitle, optional"><input className={inputClass} value={work.subtitle ?? ""} onChange={(event) => onChange({ ...work, subtitle: event.target.value || undefined })} /></Field>
+        <Field label="Slug"><input className={inputClass} value={work.slug} onChange={(event) => onChange({ ...work, slug: slugify(event.target.value) })} /></Field>
         <Field label="Year">
-          <div className="grid gap-2">
-            <input
-              className={inputClass}
-              value={work.year}
-              list="work-year-options"
-              onChange={(event) => onChange({ ...work, year: event.target.value })}
-            />
-            <datalist id="work-year-options">
-              {yearOptions.map((year) => (
-                <option key={year || "empty-year"} value={year} />
-              ))}
-            </datalist>
-            <select className={inputClass} value={work.year} onChange={(event) => onChange({ ...work, year: event.target.value })}>
-              {yearOptions.map((year) => (
-                <option key={year || "empty-year-select"} value={year}>
-                  {year || "No year / Other"}
-                </option>
-              ))}
-            </select>
-          </div>
+          <input className={inputClass} value={work.year} list="work-year-options" onChange={(event) => onChange({ ...work, year: event.target.value })} />
+          <datalist id="work-year-options">{yearOptions.map((year) => <option key={year || "empty-year"} value={year} />)}</datalist>
         </Field>
-        <Field label="Type tags, comma separated">
-          <input className={inputClass} value={listToText(work.type)} onChange={(event) => onChange({ ...work, type: textToList(event.target.value) })} />
+        <Field label="Type tags, comma separated"><input className={inputClass} value={listToText(work.type)} onChange={(event) => onChange({ ...work, type: textToList(event.target.value) })} /></Field>
+        <Field label="Length">
+          <select className={inputClass} value={work.length ?? ""} onChange={(event) => onChange({ ...work, length: event.target.value ? event.target.value as "short" | "long" : undefined })}>
+            <option value="" /><option value="short">short</option><option value="long">long</option>
+          </select>
         </Field>
+        <Field label="Additional tags, comma separated"><input className={inputClass} value={listToText(work.tags)} onChange={(event) => onChange({ ...work, tags: textToList(event.target.value) })} /></Field>
       </div>
-      <Field label="Summary">
-        <textarea className={textareaClass} value={work.summary} onChange={(event) => onChange({ ...work, summary: event.target.value })} />
-      </Field>
-      <Field label="Cover image URL, optional">
-        <input className={inputClass} value={work.cover ?? ""} onChange={(event) => onChange({ ...work, cover: event.target.value || undefined })} />
-      </Field>
-      {work.cover ? <ImagePreviewGrid images={[{ src: work.cover, alt: `${work.title} cover` }]} /> : null}
-      <ImageUploader
-        label="Upload cover image"
-        multiple={false}
-        onUploaded={(images) => onChange({ ...work, cover: images[0]?.src ?? work.cover })}
-      />
-      <label className="flex items-center gap-2 text-sm text-ink">
-        <input type="checkbox" checked={work.published} onChange={(event) => onChange({ ...work, published: event.target.checked })} />
-        Published
-      </label>
+      <Field label="Summary"><textarea className={textareaClass} value={work.summary} onChange={(event) => onChange({ ...work, summary: event.target.value })} /></Field>
+      <Field label="Cover image URL, optional"><input className={inputClass} value={work.cover ?? ""} onChange={(event) => onChange({ ...work, cover: event.target.value || undefined })} /></Field>
+      {work.cover ? <ImagePreviewGrid images={[{ src: work.cover, alt: work.title }]} /> : null}
+      <ImageUploader label="Upload cover image" multiple={false} onUploaded={(images) => onChange({ ...work, cover: images[0]?.src ?? work.cover })} />
+      <label className="flex min-h-11 items-center gap-2 text-sm text-ink"><input type="checkbox" checked={work.published} onChange={(event) => onChange({ ...work, published: event.target.checked })} />Published</label>
+      {work.album ? (
+        <>
+          <AlbumEditor album={work.album} onChange={(album) => onChange({ ...work, album })} />
+          <button type="button" className={buttonClass} onClick={() => { if (window.confirm("Remove album structure?")) onChange({ ...work, album: undefined }); }}>Remove album</button>
+        </>
+      ) : <button type="button" className={buttonClass} onClick={() => onChange({ ...work, album: { canvasHeight: 1350, photos: [], series: [] } })}>Add photo album</button>}
       <ModuleList modules={work.modules} onChange={(modules) => onChange({ ...work, modules })} />
     </div>
   );
@@ -537,27 +363,30 @@ function NoteForm({ note, onChange }: { note: Note; onChange: (note: Note) => vo
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2">
-        <Field label="Title">
-          <input className={inputClass} value={note.title} onChange={(event) => onChange({ ...note, title: event.target.value })} />
-        </Field>
-        <Field label="Slug">
-          <input className={inputClass} value={note.slug} onChange={(event) => onChange({ ...note, slug: slugify(event.target.value) })} />
-        </Field>
-        <Field label="Date">
-          <input className={inputClass} type="date" value={note.date} onChange={(event) => onChange({ ...note, date: event.target.value })} />
-        </Field>
-        <Field label="Tags, comma separated">
-          <input className={inputClass} value={listToText(note.tags)} onChange={(event) => onChange({ ...note, tags: textToList(event.target.value) })} />
-        </Field>
+        <Field label="Title"><input className={inputClass} value={note.title} onChange={(event) => onChange({ ...note, title: event.target.value })} /></Field>
+        <Field label="Slug"><input className={inputClass} value={note.slug} onChange={(event) => onChange({ ...note, slug: slugify(event.target.value) })} /></Field>
+        <Field label="Date"><input className={inputClass} type="date" value={note.date} onChange={(event) => onChange({ ...note, date: event.target.value })} /></Field>
+        <Field label="Tags, comma separated"><input className={inputClass} value={listToText(note.tags)} onChange={(event) => onChange({ ...note, tags: textToList(event.target.value) })} /></Field>
       </div>
-      <Field label="Summary">
-        <textarea className={textareaClass} value={note.summary} onChange={(event) => onChange({ ...note, summary: event.target.value })} />
-      </Field>
-      <label className="flex items-center gap-2 text-sm text-ink">
-        <input type="checkbox" checked={note.published} onChange={(event) => onChange({ ...note, published: event.target.checked })} />
-        Published
-      </label>
+      <Field label="Summary"><textarea className={textareaClass} value={note.summary} onChange={(event) => onChange({ ...note, summary: event.target.value })} /></Field>
+      <label className="flex min-h-11 items-center gap-2 text-sm text-ink"><input type="checkbox" checked={note.published} onChange={(event) => onChange({ ...note, published: event.target.checked })} />Published</label>
       <ModuleList modules={note.modules} onChange={(modules) => onChange({ ...note, modules })} />
+    </div>
+  );
+}
+
+function PracticeForm({ entry, onChange }: { entry: PracticeEntry; onChange: (entry: PracticeEntry) => void }) {
+  return (
+    <div className="max-w-3xl space-y-6">
+      <div className="grid gap-4 md:grid-cols-2">
+        <Field label="Title"><input className={inputClass} value={entry.title} onChange={(event) => onChange({ ...entry, title: event.target.value })} /></Field>
+        <Field label="Date"><input className={inputClass} type="date" value={entry.date} onChange={(event) => onChange({ ...entry, date: event.target.value })} /></Field>
+        <Field label="Organization"><input className={inputClass} value={entry.organization ?? ""} onChange={(event) => onChange({ ...entry, organization: event.target.value })} /></Field>
+        <Field label="Type"><input className={inputClass} value={entry.type ?? ""} onChange={(event) => onChange({ ...entry, type: event.target.value })} /></Field>
+      </div>
+      <Field label="Summary"><textarea className={textareaClass} value={entry.summary ?? ""} onChange={(event) => onChange({ ...entry, summary: event.target.value })} /></Field>
+      <Field label="External or work URL"><input className={inputClass} value={entry.href ?? ""} onChange={(event) => onChange({ ...entry, href: event.target.value })} /></Field>
+      <label className="flex min-h-11 items-center gap-2 text-sm text-ink"><input type="checkbox" checked={entry.published} onChange={(event) => onChange({ ...entry, published: event.target.checked })} />Published</label>
     </div>
   );
 }
@@ -584,26 +413,10 @@ function SecretEditor({
   return (
     <div className="space-y-8">
       <div className="max-w-3xl space-y-4 border-y border-line py-6">
-        <Field label="Secret page title">
-          <input className={inputClass} value={secret.title} onChange={(event) => onChangeSecret({ ...secret, title: event.target.value })} />
-        </Field>
-        <Field label="Intro lines, one paragraph per line">
-          <textarea
-            className={textareaClass}
-            value={secret.intro.join("\n")}
-            onChange={(event) => onChangeSecret({ ...secret, intro: event.target.value.split("\n") })}
-          />
-        </Field>
+        <Field label="Secret page title"><input className={inputClass} value={secret.title} onChange={(event) => onChangeSecret({ ...secret, title: event.target.value })} /></Field>
+        <Field label="Intro lines, one paragraph per line"><textarea className={textareaClass} value={secret.intro.join("\n")} onChange={(event) => onChangeSecret({ ...secret, intro: event.target.value.split("\n") })} /></Field>
       </div>
-
-      <TwoColumnEditor
-        title="Secret entries"
-        onAdd={onAdd}
-        items={secret.entries.map((entry) => ({ title: entry.title, meta: entry.date, published: entry.published }))}
-        selected={selected}
-        onSelect={onSelect}
-        onDelete={onDelete}
-      >
+      <TwoColumnEditor title="Secret entries" onAdd={onAdd} items={secret.entries.map((entry) => ({ title: entry.title, meta: entry.date, published: entry.published }))} selected={selected} onSelect={onSelect} onDelete={onDelete}>
         {selectedItem ? <NoteForm note={selectedItem} onChange={onChangeEntry} /> : <EmptyState label="No secret entry selected." />}
       </TwoColumnEditor>
     </div>
@@ -614,148 +427,32 @@ function AboutForm({ about, onChange }: { about: About; onChange: (about: About)
   return (
     <div className="max-w-3xl space-y-6">
       <div className="grid gap-4 md:grid-cols-2">
-        <Field label="Name">
-          <input className={inputClass} value={about.name} onChange={(event) => onChange({ ...about, name: event.target.value })} />
-        </Field>
-        <Field label="Short description">
-          <input className={inputClass} value={about.description} onChange={(event) => onChange({ ...about, description: event.target.value })} />
-        </Field>
+        <Field label="Name"><input className={inputClass} value={about.name} onChange={(event) => onChange({ ...about, name: event.target.value })} /></Field>
+        <Field label="Short description"><input className={inputClass} value={about.description} onChange={(event) => onChange({ ...about, description: event.target.value })} /></Field>
       </div>
-      <Field label="Intro paragraphs, one paragraph per line">
-        <textarea className={textareaClass} value={(about.intro ?? []).join("\n")} onChange={(event) => onChange({ ...about, intro: event.target.value.split("\n") })} />
-      </Field>
-      <Field label="Images, one per line: src | alt | caption">
-        <textarea className={textareaClass} value={imagesToText(about.images)} onChange={(event) => onChange({ ...about, images: textToImages(event.target.value) })} />
-      </Field>
+      <Field label="Intro paragraphs, one paragraph per line"><textarea className={textareaClass} value={(about.intro ?? []).join("\n")} onChange={(event) => onChange({ ...about, intro: event.target.value.split("\n") })} /></Field>
+      <Field label="Images, one per line: src | alt | caption"><textarea className={textareaClass} value={imagesToText(about.images)} onChange={(event) => onChange({ ...about, images: textToImages(event.target.value) })} /></Field>
       <ImagePreviewGrid images={about.images ?? []} />
-      <ImageUploader
-        label="Upload about images"
-        onUploaded={(images) => onChange({ ...about, images: [...(about.images ?? []), ...images] })}
-      />
-      <Field label="Links, one per line: label | href">
-        <textarea className={textareaClass} value={linksToText(about.links)} onChange={(event) => onChange({ ...about, links: textToLinks(event.target.value) })} />
-      </Field>
+      <ImageUploader label="Upload about images" onUploaded={(images) => onChange({ ...about, images: [...(about.images ?? []), ...images] })} />
+      <Field label="Links, one per line: label | href"><textarea className={textareaClass} value={linksToText(about.links)} onChange={(event) => onChange({ ...about, links: textToLinks(event.target.value) })} /></Field>
     </div>
   );
 }
 
-function HomeForm({
-  home,
-  about,
-  onChange,
-  onChangeAbout
-}: {
-  home: Home;
-  about: About;
-  onChange: (home: Home) => void;
-  onChangeAbout: (about: About) => void;
-}) {
+function HomeForm({ home, onChange }: { home: Home; onChange: (home: Home) => void }) {
   return (
-    <div className="max-w-3xl space-y-8">
-      <section className="space-y-4 border-y border-line py-6">
-        <h2 className="text-sm uppercase text-muted">Hero</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Homepage name">
-            <input className={inputClass} value={about.name} onChange={(event) => onChangeAbout({ ...about, name: event.target.value })} />
-          </Field>
-          <Field label="Homepage description">
-            <input className={inputClass} value={about.description} onChange={(event) => onChangeAbout({ ...about, description: event.target.value })} />
-          </Field>
-        </div>
-        <Field label="Small label above name">
-          <input className={inputClass} value={home.eyebrow} onChange={(event) => onChange({ ...home, eyebrow: event.target.value })} />
-        </Field>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Portrait image URL">
-            <input className={inputClass} value={home.portrait.src} onChange={(event) => onChange({ ...home, portrait: { ...home.portrait, src: event.target.value } })} />
-          </Field>
-          <Field label="Portrait alt text">
-            <input className={inputClass} value={home.portrait.alt} onChange={(event) => onChange({ ...home, portrait: { ...home.portrait, alt: event.target.value } })} />
-          </Field>
-        </div>
-        <ImagePreviewGrid images={[home.portrait]} />
-        <ImageUploader
-          label="Upload homepage portrait"
-          multiple={false}
-          onUploaded={(images) => {
-            const image = images[0];
-            if (image) onChange({ ...home, portrait: { src: image.src, alt: home.portrait.alt || image.alt } });
-          }}
-        />
-      </section>
-
-      <section className="space-y-4 border-b border-line pb-6">
-        <h2 className="text-sm uppercase text-muted">About preview</h2>
-        <Field label="About label">
-          <input className={inputClass} value={home.aboutLabel} onChange={(event) => onChange({ ...home, aboutLabel: event.target.value })} />
-        </Field>
-        <Field label="About short text on homepage">
-          <textarea className={textareaClass} value={home.aboutText} onChange={(event) => onChange({ ...home, aboutText: event.target.value })} />
-        </Field>
-      </section>
-
-      <section className="space-y-4 border-b border-line pb-6">
-        <h2 className="text-sm uppercase text-muted">Works section</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Works heading">
-            <input className={inputClass} value={home.worksEyebrow} onChange={(event) => onChange({ ...home, worksEyebrow: event.target.value })} />
-          </Field>
-          <Field label="Works subtitle">
-            <input className={inputClass} value={home.worksTitle} onChange={(event) => onChange({ ...home, worksTitle: event.target.value })} />
-          </Field>
-          <Field label="Link text">
-            <input className={inputClass} value={home.worksLinkLabel} onChange={(event) => onChange({ ...home, worksLinkLabel: event.target.value })} />
-          </Field>
-          <Field label="Number of works shown">
-            <input
-              className={inputClass}
-              type="number"
-              min="0"
-              max="12"
-              value={home.worksCount}
-              onChange={(event) => onChange({ ...home, worksCount: Math.max(0, Number(event.target.value) || 0) })}
-            />
-          </Field>
-        </div>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-sm uppercase text-muted">Notes section</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Notes heading">
-            <input className={inputClass} value={home.notesEyebrow} onChange={(event) => onChange({ ...home, notesEyebrow: event.target.value })} />
-          </Field>
-          <Field label="Notes subtitle">
-            <input className={inputClass} value={home.notesTitle} onChange={(event) => onChange({ ...home, notesTitle: event.target.value })} />
-          </Field>
-          <Field label="Link text">
-            <input className={inputClass} value={home.notesLinkLabel} onChange={(event) => onChange({ ...home, notesLinkLabel: event.target.value })} />
-          </Field>
-          <Field label="Number of notes shown">
-            <input
-              className={inputClass}
-              type="number"
-              min="0"
-              max="12"
-              value={home.notesCount}
-              onChange={(event) => onChange({ ...home, notesCount: Math.max(0, Number(event.target.value) || 0) })}
-            />
-          </Field>
-        </div>
-      </section>
+    <div className="max-w-3xl border-y border-line py-6">
+      <Field label="Number of random works">
+        <input className={inputClass} type="number" min="1" max="12" value={home.worksCount} onChange={(event) => onChange({ ...home, worksCount: Math.max(1, Math.min(12, Number(event.target.value) || 4)) })} />
+      </Field>
     </div>
   );
 }
 
 function ModuleList({ modules, onChange }: { modules: ContentModule[]; onChange: (modules: ContentModule[]) => void }) {
   function updateModule(index: number, module: ContentModule) {
-    onChange(modules.map((item, itemIndex) => (itemIndex === index ? module : item)));
+    onChange(modules.map((item, itemIndex) => itemIndex === index ? module : item));
   }
-
-  function removeModule(index: number) {
-    onChange(modules.filter((_, itemIndex) => itemIndex !== index));
-  }
-
   function moveModule(index: number, direction: -1 | 1) {
     const nextIndex = index + direction;
     if (nextIndex < 0 || nextIndex >= modules.length) return;
@@ -764,50 +461,26 @@ function ModuleList({ modules, onChange }: { modules: ContentModule[]; onChange:
     next.splice(nextIndex, 0, item);
     onChange(next);
   }
-
   return (
     <div className="space-y-4 border-t border-line pt-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h3 className="text-sm uppercase text-muted">Content modules</h3>
-        <select
-          className={inputClass}
-          value=""
-          onChange={(event) => {
-            const kind = event.target.value as ContentModule["kind"];
-            if (kind) onChange([...modules, makeModule(kind)]);
-          }}
-        >
+        <select className={inputClass} value="" onChange={(event) => { const kind = event.target.value as ContentModule["kind"]; if (kind) onChange([...modules, makeModule(kind)]); }}>
           <option value="">Add module...</option>
-          <option value="paragraph">Paragraph</option>
-          <option value="heading">Section heading</option>
-          <option value="poem">Poem / preserved line breaks</option>
-          <option value="note">Note block</option>
-          <option value="image">Image</option>
-          <option value="gallery">Gallery</option>
-          <option value="yearGallery">Year gallery</option>
-          <option value="video">Video</option>
-          <option value="links">Links</option>
-          <option value="divider">Divider</option>
+          <option value="paragraph">Paragraph</option><option value="heading">Section heading</option><option value="poem">Poem / preserved line breaks</option>
+          <option value="note">Note block</option><option value="image">Image</option><option value="gallery">Gallery</option><option value="yearGallery">Year gallery</option>
+          <option value="video">Video</option><option value="links">Links</option><option value="divider">Divider</option>
         </select>
       </div>
-
       <div className="space-y-5">
         {modules.map((module, index) => (
           <div key={index} className="space-y-4 border border-line bg-white p-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="text-xs uppercase text-muted">
-                {index + 1}. {module.kind}
-              </p>
+              <p className="text-xs uppercase text-muted">{index + 1}. {module.kind}</p>
               <div className="flex gap-2">
-                <button type="button" className={buttonClass} onClick={() => moveModule(index, -1)} disabled={index === 0}>
-                  Up
-                </button>
-                <button type="button" className={buttonClass} onClick={() => moveModule(index, 1)} disabled={index === modules.length - 1}>
-                  Down
-                </button>
-                <button type="button" className={buttonClass} onClick={() => removeModule(index)}>
-                  Delete
-                </button>
+                <button type="button" className={buttonClass} onClick={() => moveModule(index, -1)} disabled={index === 0}>Up</button>
+                <button type="button" className={buttonClass} onClick={() => moveModule(index, 1)} disabled={index === modules.length - 1}>Down</button>
+                <button type="button" className={buttonClass} onClick={() => onChange(modules.filter((_, itemIndex) => itemIndex !== index))}>Delete</button>
               </div>
             </div>
             <ModuleFields module={module} onChange={(nextModule) => updateModule(index, nextModule)} />
@@ -823,172 +496,34 @@ function ModuleFields({ module, onChange }: { module: ContentModule; onChange: (
     case "heading":
     case "paragraph":
     case "poem":
+    case "date":
     case "quote":
-      return (
-        <Field label={module.kind === "poem" ? "Text, line breaks preserved" : "Text"}>
-          <textarea className={textareaClass} value={module.text} onChange={(event) => onChange({ ...module, text: event.target.value })} />
-        </Field>
-      );
+      return <Field label={module.kind === "poem" ? "Text, line breaks preserved" : "Text"}><textarea className={textareaClass} value={module.text} onChange={(event) => onChange({ ...module, text: event.target.value })} /></Field>;
     case "note":
-      return (
-        <div className="space-y-4">
-          <Field label="Small title, optional">
-            <input className={inputClass} value={module.title ?? ""} onChange={(event) => onChange({ ...module, title: event.target.value })} />
-          </Field>
-          <Field label="Text">
-            <textarea className={textareaClass} value={module.text} onChange={(event) => onChange({ ...module, text: event.target.value })} />
-          </Field>
-        </div>
-      );
+      return <div className="space-y-4"><Field label="Small title, optional"><input className={inputClass} value={module.title ?? ""} onChange={(event) => onChange({ ...module, title: event.target.value })} /></Field><Field label="Text"><textarea className={textareaClass} value={module.text} onChange={(event) => onChange({ ...module, text: event.target.value })} /></Field></div>;
     case "image":
       return (
         <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Image URL">
-            <input className={inputClass} value={module.src} onChange={(event) => onChange({ ...module, src: event.target.value })} />
-          </Field>
-          {module.src ? <ImagePreviewGrid images={[module]} /> : null}
-          <Field label="Alt text">
-            <input className={inputClass} value={module.alt} onChange={(event) => onChange({ ...module, alt: event.target.value })} />
-          </Field>
-          <div className="md:col-span-2">
-            <Field label="Caption, optional">
-              <input className={inputClass} value={module.caption ?? ""} onChange={(event) => onChange({ ...module, caption: event.target.value })} />
-            </Field>
-          </div>
-          <div className="md:col-span-2">
-            <ImageUploader
-              label="Upload image"
-              multiple={false}
-              onUploaded={(images) => {
-                const image = images[0];
-                if (image) onChange({ ...module, src: image.src, alt: module.alt || image.alt });
-              }}
-            />
-          </div>
+          <Field label="Image URL"><input className={inputClass} value={module.src} onChange={(event) => onChange({ ...module, src: event.target.value })} /></Field>
+          <Field label="Alt text"><input className={inputClass} value={module.alt} onChange={(event) => onChange({ ...module, alt: event.target.value })} /></Field>
+          <div className="md:col-span-2"><Field label="Caption, optional"><input className={inputClass} value={module.caption ?? ""} onChange={(event) => onChange({ ...module, caption: event.target.value })} /></Field></div>
+          {module.src ? <div className="md:col-span-2"><ImagePreviewGrid images={[module]} /></div> : null}
+          <div className="md:col-span-2"><ImageUploader label="Upload image" multiple={false} onUploaded={(images) => { const image = images[0]; if (image) onChange({ ...module, src: image.src, alt: module.alt || image.alt }); }} /></div>
         </div>
       );
     case "gallery":
-      return (
-        <div className="space-y-3">
-          <Field label="Images, one per line: src | alt | caption">
-            <textarea className={textareaClass} value={imagesToText(module.images)} onChange={(event) => onChange({ ...module, images: textToImages(event.target.value) })} />
-          </Field>
-          <ImagePreviewGrid images={module.images} />
-          <ImageUploader label="Upload gallery images" onUploaded={(images) => onChange({ ...module, images: [...module.images, ...images] })} />
-        </div>
-      );
+      return <div className="space-y-3"><Field label="Images, one per line: src | alt | caption"><textarea className={textareaClass} value={imagesToText(module.images)} onChange={(event) => onChange({ ...module, images: textToImages(event.target.value) })} /></Field><ImagePreviewGrid images={module.images} /><ImageUploader label="Upload gallery images" onUploaded={(images) => onChange({ ...module, images: [...module.images, ...images] })} /></div>;
     case "yearGallery":
-      return (
-        <div className="space-y-4">
-          <Field label="Year">
-            <input className={inputClass} value={module.year} onChange={(event) => onChange({ ...module, year: event.target.value })} />
-          </Field>
-          <Field label="Year note, optional">
-            <textarea className={textareaClass} value={module.note ?? ""} onChange={(event) => onChange({ ...module, note: event.target.value })} />
-          </Field>
-          <Field label="Images, one per line: src | alt | caption">
-            <textarea className={textareaClass} value={imagesToText(module.images)} onChange={(event) => onChange({ ...module, images: textToImages(event.target.value) })} />
-          </Field>
-          <ImagePreviewGrid images={module.images} />
-          <ImageUploader label="Upload year images" onUploaded={(images) => onChange({ ...module, images: [...module.images, ...images] })} />
-        </div>
-      );
+      return <div className="space-y-4"><Field label="Year"><input className={inputClass} value={module.year} onChange={(event) => onChange({ ...module, year: event.target.value })} /></Field><Field label="Year note, optional"><textarea className={textareaClass} value={module.note ?? ""} onChange={(event) => onChange({ ...module, note: event.target.value })} /></Field><Field label="Images, one per line: src | alt | caption"><textarea className={textareaClass} value={imagesToText(module.images)} onChange={(event) => onChange({ ...module, images: textToImages(event.target.value) })} /></Field><ImagePreviewGrid images={module.images} /><ImageUploader label="Upload year images" onUploaded={(images) => onChange({ ...module, images: [...module.images, ...images] })} /></div>;
     case "video":
-      return (
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Embed URL">
-            <input className={inputClass} value={module.url} onChange={(event) => onChange({ ...module, url: event.target.value })} />
-          </Field>
-          <Field label="Caption, optional">
-            <input className={inputClass} value={module.caption ?? ""} onChange={(event) => onChange({ ...module, caption: event.target.value })} />
-          </Field>
-        </div>
-      );
+      return <div className="grid gap-4 md:grid-cols-2"><Field label="Embed URL"><input className={inputClass} value={module.url} onChange={(event) => onChange({ ...module, url: event.target.value })} /></Field><Field label="Caption, optional"><input className={inputClass} value={module.caption ?? ""} onChange={(event) => onChange({ ...module, caption: event.target.value })} /></Field></div>;
     case "links":
-      return (
-        <Field label="Links, one per line: label | href">
-          <textarea className={textareaClass} value={linksToText(module.items)} onChange={(event) => onChange({ ...module, items: textToLinks(event.target.value) })} />
-        </Field>
-      );
-    case "divider":
-      return <p className="text-sm text-muted">A quiet horizontal divider will appear here.</p>;
-    default:
-      return null;
+      return <Field label="Links, one per line: label | href"><textarea className={textareaClass} value={linksToText(module.items)} onChange={(event) => onChange({ ...module, items: textToLinks(event.target.value) })} /></Field>;
+    case "divider": return <hr className="border-line" />;
+    default: return null;
   }
 }
 
 function EmptyState({ label }: { label: string }) {
   return <p className="border-y border-line py-8 text-sm text-muted">{label}</p>;
-}
-
-function ImagePreviewGrid({ images }: { images: ImageItem[] }) {
-  const visibleImages = images.filter((image) => image.src);
-
-  if (!visibleImages.length) {
-    return <p className="text-xs text-muted">No image preview yet.</p>;
-  }
-
-  return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {visibleImages.map((image) => (
-        <figure key={`${image.src}-${image.alt}`} className="space-y-2 border border-line bg-white p-2">
-          <img src={image.src} alt={image.alt || ""} className="aspect-[4/3] w-full object-cover" />
-          <figcaption className="break-all text-xs leading-5 text-muted">{image.caption || image.alt || image.src}</figcaption>
-        </figure>
-      ))}
-    </div>
-  );
-}
-
-function ImageUploader({
-  label,
-  multiple = true,
-  onUploaded
-}: {
-  label: string;
-  multiple?: boolean;
-  onUploaded: (images: UploadedImage[]) => void;
-}) {
-  const [message, setMessage] = useState("");
-
-  async function upload(files: FileList | null) {
-    if (!files?.length) return;
-    setMessage("Uploading...");
-
-    const formData = new FormData();
-    Array.from(files).forEach((file) => formData.append("files", file));
-
-    const response = await fetch("/api/admin/upload", {
-      method: "POST",
-      body: formData
-    });
-
-    const body = await response.json();
-    if (!response.ok) {
-      setMessage(body.message ?? "Upload failed.");
-      return;
-    }
-
-    onUploaded(body.images as UploadedImage[]);
-    setMessage(`Added ${(body.images as UploadedImage[]).length} image(s). Remember to save.`);
-  }
-
-  return (
-    <div className="space-y-2 border border-dashed border-line bg-paper p-3">
-      <label className="block">
-        <span className="mb-2 block text-xs uppercase tracking-wide text-muted">{label}</span>
-        <input
-          type="file"
-          accept="image/*"
-          multiple={multiple}
-          onChange={(event) => {
-            void upload(event.target.files);
-            event.target.value = "";
-          }}
-          className="block w-full text-sm text-muted file:mr-3 file:border file:border-line file:bg-white file:px-3 file:py-2 file:text-sm file:text-ink"
-        />
-      </label>
-      {message ? <p className="text-xs text-muted">{message}</p> : null}
-    </div>
-  );
 }

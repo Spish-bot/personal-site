@@ -2,52 +2,219 @@
   {
     "slug": "street-photography",
     "title": "Between Decisive Moments",
-    "year": "",
+    "year": "2026",
     "type": [
       "Photography"
     ],
     "summary": "The moments I captured with my Sony Alpha 7C II.",
     "cover": "/images/works/street-photography/2026/02-snow-night-road.JPG ",
     "published": true,
+    "modules": [],
+    "album": {
+      "canvasHeight": 3020,
+      "series": [],
+      "photos": [
+        {
+          "id": "street-01",
+          "src": "/images/works/street-photography/2026/01-lamp-blossoms.JPG",
+          "alt": "Night lamp and red blossoms in soft focus",
+          "x": 4,
+          "y": 1.79,
+          "width": 44,
+          "rotation": -1.2
+        },
+        {
+          "id": "street-02",
+          "src": "/images/works/street-photography/2026/03-rocky-shore.JPG",
+          "alt": "Person working among rocks by the sea",
+          "x": 57,
+          "y": 2.24,
+          "width": 35,
+          "rotation": 1.1
+        },
+        {
+          "id": "street-03",
+          "src": "/images/works/street-photography/2026/04-blue-sign.JPG",
+          "alt": "Blue sky, sign, utility pole, and overhead wires",
+          "x": 10,
+          "y": 15.65,
+          "width": 33,
+          "rotation": 0.7
+        },
+        {
+          "id": "street-04",
+          "src": "/images/works/street-photography/2026/05-guard-booth.JPG",
+          "alt": "Black-and-white guard booth beside a wall and scattered trash",
+          "x": 52,
+          "y": 13.41,
+          "width": 42,
+          "rotation": -0.6
+        },
+        {
+          "id": "street-05",
+          "src": "/images/works/street-photography/2026/06-winter-trash.JPG",
+          "alt": "Black-and-white winter street scene with trash and pedestrians",
+          "x": 3,
+          "y": 28.61,
+          "width": 35,
+          "rotation": 1.2
+        },
+        {
+          "id": "street-06",
+          "src": "/images/works/street-photography/2026/07-snow-lamp.jpg",
+          "alt": "Black-and-white snow passing through a bright street lamp",
+          "x": 42,
+          "y": 25.48,
+          "width": 24,
+          "rotation": -1.4
+        },
+        {
+          "id": "street-07",
+          "src": "/images/works/street-photography/2026/02-snow-night-road.JPG",
+          "alt": "",
+          "x": 65,
+          "y": 27.72,
+          "width": 30,
+          "rotation": 0.8
+        },
+        {
+          "id": "street-08",
+          "src": "/images/works/street-photography/2026/20261029-DSC07759.jpg",
+          "alt": "",
+          "x": 4,
+          "y": 39.07,
+          "width": 40,
+          "rotation": -0.6
+        },
+        {
+          "id": "street-09",
+          "src": "/images/works/street-photography/2026/20261029-DSC07797.jpg",
+          "alt": "",
+          "x": 54,
+          "y": 39.07,
+          "width": 40,
+          "rotation": 0.5
+        },
+        {
+          "id": "street-10",
+          "src": "/images/works/street-photography/2026/20261029-DSC07839.jpg",
+          "alt": "",
+          "x": 2,
+          "y": 50.33,
+          "width": 28,
+          "rotation": 0.8
+        },
+        {
+          "id": "street-11",
+          "src": "/images/works/street-photography/2026/20261030-DSC08023.jpg",
+          "alt": "",
+          "x": 35,
+          "y": 50.33,
+          "width": 36,
+          "rotation": -0.4
+        },
+        {
+          "id": "street-12",
+          "src": "/images/works/street-photography/2026/20261101-DSC08139.jpg",
+          "alt": "",
+          "x": 73,
+          "y": 50.33,
+          "width": 25,
+          "rotation": 0.6
+        },
+        {
+          "id": "street-13",
+          "src": "/images/works/street-photography/2026/20261101-DSC08216.jpg",
+          "alt": "",
+          "x": 2,
+          "y": 59.93,
+          "width": 38,
+          "rotation": -0.5
+        },
+        {
+          "id": "street-14",
+          "src": "/images/works/street-photography/2026/20261101-DSC08229.jpg",
+          "alt": "",
+          "x": 44,
+          "y": 59.93,
+          "width": 28,
+          "rotation": 0.7
+        },
+        {
+          "id": "street-15",
+          "src": "/images/works/street-photography/2026/63c812c031926d507e16b8bdae888a3f.png",
+          "alt": "",
+          "x": 74,
+          "y": 59.93,
+          "width": 24,
+          "rotation": -0.6
+        },
+        {
+          "id": "street-16",
+          "src": "/images/works/street-photography/2026/64d596bf4d45d24373b2185c3821d75d.jpg",
+          "alt": "",
+          "x": 2,
+          "y": 69.87,
+          "width": 32,
+          "rotation": 0.4
+        },
+        {
+          "id": "street-17",
+          "src": "/images/works/street-photography/2026/dc83d182c822bac0a14a06c0c5361535.jpg",
+          "alt": "",
+          "x": 38,
+          "y": 69.87,
+          "width": 26,
+          "rotation": -0.7
+        },
+        {
+          "id": "street-18",
+          "src": "/images/works/street-photography/2026/75a10500bcdab391f96b8edf10714807.png",
+          "alt": "",
+          "x": 68,
+          "y": 69.87,
+          "width": 30,
+          "rotation": 0.5
+        },
+        {
+          "id": "street-19",
+          "src": "/images/works/street-photography/2026/97e67bff7ddbf970e6a713817616fe25.png",
+          "alt": "",
+          "x": 4,
+          "y": 82.78,
+          "width": 44,
+          "rotation": -0.4
+        },
+        {
+          "id": "street-20",
+          "src": "/images/works/street-photography/2026/fe651cbdb05db0f7fbaa6860e5496201.jpg",
+          "alt": "",
+          "x": 54,
+          "y": 82.78,
+          "width": 44,
+          "rotation": 0.6
+        }
+      ]
+    }
+  },
+  {
+    "slug": "firefly-poem",
+    "title": "萤火",
+    "year": "2026",
+    "type": [
+      "Writing",
+      "Poetry"
+    ],
+    "summary": "",
+    "published": true,
     "modules": [
       {
-        "kind": "paragraph",
-        "text": ""
+        "kind": "poem",
+        "text": "不眠的夜晚\n外边遥远的莽野上空气湿润\n\n月光下 我和野草\n就着各自的影子席地而坐\n\n一尾河流路过 回头看着我\n我们或许可以顺路\n\n它从南方驮来\n许多故事 许多倒影 许多歌谣\n我挽起裤子 赤脚插在河床 涉水未深\n\n那天晚上\n河面上漂来一枚荔枝味的糖果\n我是否可以将其比作月亮"
       },
       {
-        "kind": "yearGallery",
-        "year": "2026",
-        "note": "",
-        "images": [
-          {
-            "src": "/images/works/street-photography/2026/01-lamp-blossoms.JPG",
-            "alt": "Night lamp and red blossoms in soft focus"
-          },
-          {
-            "src": "/images/works/street-photography/2026/03-rocky-shore.JPG",
-            "alt": "Person working among rocks by the sea"
-          },
-          {
-            "src": "/images/works/street-photography/2026/04-blue-sign.JPG",
-            "alt": "Blue sky, sign, utility pole, and overhead wires"
-          },
-          {
-            "src": "/images/works/street-photography/2026/05-guard-booth.JPG",
-            "alt": "Black-and-white guard booth beside a wall and scattered trash"
-          },
-          {
-            "src": "/images/works/street-photography/2026/06-winter-trash.JPG",
-            "alt": "Black-and-white winter street scene with trash and pedestrians"
-          },
-          {
-            "src": "/images/works/street-photography/2026/07-snow-lamp.jpg",
-            "alt": "Black-and-white snow passing through a bright street lamp"
-          },
-          {
-            "src": "/images/works/street-photography/2026/02-snow-night-road.JPG",
-            "alt": ""
-          }
-        ]
+        "kind": "date",
+        "text": "2026.10.26凌晨一稿"
       }
     ]
   },
@@ -65,7 +232,7 @@
     "modules": [
       {
         "kind": "poem",
-        "text": "飞越宇宙与它的过往\n我的喙和羽毛整合于时间此刻的切片\n作为一只伫立枝头的乌鸦\n\n于是风把黑夜从四面八方吹来\n乌压压落满一颗大树\n我们各自作为一只伫立枝头的乌鸦\n不再言说 凝结于时间的此刻片段\n\n一直到风再一次吹起\n吹起枝头的乌鸦\n也吹起黑夜、大雪和路途\n它们纷纷扬扬地飘起 交错于乌鸦所穿行的介质\n\n等风吹起几次\n等乌鸦起降几次 几棵树\n我们再次作为一只乌鸦 伫立于彼刻的枝头\n一直到风再一次吹起"
+        "text": "飞越宇宙与它的过往\n我的喙和羽毛整合于时间此刻的切片\n作为一只伫立枝头的乌鸦\n\n于是风把黑夜从四面八方吹来\n乌压压落满一棵大树\n我们各自作为一只伫立枝头的乌鸦\n不再言说 凝结于时间的此刻片段\n\n一直到风再一次吹起\n吹起枝头的乌鸦\n也吹起黑夜、大雪和路途\n它们纷纷扬扬地飘起 交错于乌鸦所穿行的介质\n\n等风吹起几次\n等乌鸦起降几次 几棵树\n我们再次作为一只乌鸦 伫立于彼刻的枝头\n一直到风再一次吹起"
       },
       {
         "kind": "image",
@@ -81,6 +248,23 @@
             "href": "https://en.wikipedia.org/wiki/Masahisa_Fukase"
           }
         ]
+      }
+    ]
+  },
+  {
+    "slug": "cat-poem",
+    "title": "猫",
+    "year": "2025",
+    "type": [
+      "Writing",
+      "Poetry"
+    ],
+    "summary": "",
+    "published": true,
+    "modules": [
+      {
+        "kind": "poem",
+        "text": "猫趴在那\n人走过的时候\n耳朵上的聪明毛微微颤动着听着\n人急促的脚步这次是否还会掠过它\n\n猫总是小心地假装不在乎\n坐在离你不近不远的地方，门口或沙发扶手\n能用它猫眼睛的余光恰好能瞥到你的地方\n\n看见人起身的时候，猫照例会去磨爪子\n它会先看向你\n大多数时候它会并不失落地趴回原处\n\n人也会去偶尔爱着猫\n抚着它背上不长不短的毛，听它呼噜呼噜\n人怀着一小半的无可奈何想着：\n猫爱着人就像人爱着另一个人\n\n后来在猫趴在那的时候\n人试着经常去爱着猫\n心里想着自己这个人"
       }
     ]
   },

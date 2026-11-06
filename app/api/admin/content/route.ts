@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "fs/promises";
 import path from "path";
 import { NextResponse } from "next/server";
-import type { About, Home, Note, Secret, Work } from "@/lib/types";
+import type { About, Home, Note, PracticeEntry, Secret, Work } from "@/lib/types";
 
 const contentDir = path.join(process.cwd(), "content");
 
@@ -25,41 +25,38 @@ function localOnly() {
 export async function GET() {
   const blocked = localOnly();
   if (blocked) return blocked;
-
-  const [about, home, works, notes, secret] = await Promise.all([
+  const [about, home, works, notes, practice, secret] = await Promise.all([
     readJson<About>("about.json"),
     readJson<Home>("home.json"),
     readJson<Work[]>("works.json"),
     readJson<Note[]>("notes.json"),
+    readJson<PracticeEntry[]>("practice.json"),
     readJson<Secret>("secret.json")
   ]);
-
-  return NextResponse.json({ about, home, works, notes, secret });
+  return NextResponse.json({ about, home, works, notes, practice, secret });
 }
 
 export async function PUT(request: Request) {
   const blocked = localOnly();
   if (blocked) return blocked;
-
   const body = (await request.json()) as {
     about?: About;
     home?: Home;
     works?: Work[];
     notes?: Note[];
+    practice?: PracticeEntry[];
     secret?: Secret;
   };
-
-  if (!body.about || !body.home || !Array.isArray(body.works) || !Array.isArray(body.notes) || !body.secret) {
-    return NextResponse.json({ message: "Missing about, home, works, notes, or secret data." }, { status: 400 });
+  if (!body.about || !body.home || !Array.isArray(body.works) || !Array.isArray(body.notes) || !Array.isArray(body.practice) || !body.secret) {
+    return NextResponse.json({ message: "Missing content data." }, { status: 400 });
   }
-
   await Promise.all([
     writeJson("about.json", body.about),
     writeJson("home.json", body.home),
     writeJson("works.json", body.works),
     writeJson("notes.json", body.notes),
+    writeJson("practice.json", body.practice),
     writeJson("secret.json", body.secret)
   ]);
-
   return NextResponse.json({ ok: true });
 }

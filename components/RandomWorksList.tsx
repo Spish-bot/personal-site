@@ -2,82 +2,88 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowUpRight, Shuffle } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type { Work } from "@/lib/types";
 
-type WorkPreview = Pick<Work, "slug" | "title" | "year" | "type" | "summary" | "cover">;
+type WorkPreview = Pick<Work, "slug" | "title" | "year" | "type" | "cover"> & {
+  photos: string[];
+  excerpt: string;
+};
 
-function chooseWorks(works: WorkPreview[], count: number) {
+type SavedWork = {
+  slug: string;
+  cover?: string;
+};
+
+const storageKey = "spish-home-works-v2";
+
+function shuffle(works: WorkPreview[]) {
   const next = [...works];
   for (let index = next.length - 1; index > 0; index -= 1) {
     const randomIndex = Math.floor(Math.random() * (index + 1));
     [next[index], next[randomIndex]] = [next[randomIndex], next[index]];
   }
-  return next.slice(0, count);
+  return next;
+}
+
+function chooseCover(work: WorkPreview, preferred?: string) {
+  const pool = work.photos.length ? work.photos : work.cover?.trim() ? [work.cover.trim()] : [];
+  const cover = preferred && pool.includes(preferred) ? preferred : pool[Math.floor(Math.random() * pool.length)];
+  return { ...work, cover };
+}
+
+function initialSelection(works: WorkPreview[], count: number) {
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(storageKey) ?? "[]") as SavedWork[];
+    const restored = saved.flatMap((entry) => {
+      const work = works.find((item) => item.slug === entry.slug);
+      return work ? [chooseCover(work, entry.cover)] : [];
+    });
+    const remaining = shuffle(works.filter((work) => !restored.some((item) => item.slug === work.slug))).map((work) => chooseCover(work));
+    return [...restored, ...remaining].slice(0, count);
+  } catch {
+    return shuffle(works).slice(0, count).map((work) => chooseCover(work));
+  }
 }
 
 export function RandomWorksList({ works, count }: { works: WorkPreview[]; count: number }) {
   const limit = Math.min(works.length, Math.max(0, Math.floor(count)));
   const [selected, setSelected] = useState(() => works.slice(0, limit));
-  const [active, setActive] = useState(0);
-  const activeWork = selected[active] ?? selected[0];
 
   useEffect(() => {
-    setSelected(chooseWorks(works, limit));
-    setActive(0);
+    const next = initialSelection(works, limit);
+    setSelected(next);
+    try {
+      sessionStorage.setItem(storageKey, JSON.stringify(next.map((work) => ({ slug: work.slug, cover: work.cover }))));
+    } catch {}
   }, [limit, works]);
 
-  function refresh() {
-    const next = chooseWorks(works, limit);
-    if (works.length > limit && next.every((work) => selected.some((item) => item.slug === work.slug))) {
-      const alternative = works.find((work) => !next.some((item) => item.slug === work.slug));
-      if (alternative && next.length) next[next.length - 1] = alternative;
-    }
-    setSelected(next);
-    setActive(0);
-  }
-
   return (
-    <div className="home-work-browser">
-      <div className="home-work-column">
-        <div className="home-work-list">
-          {selected.map((work, index) => (
-            <Link
-              key={work.slug}
-              href={"/works/" + work.slug}
-              className="home-work-entry"
-              data-active={activeWork?.slug === work.slug ? "true" : undefined}
-              onMouseEnter={() => setActive(index)}
-              onFocus={() => setActive(index)}
-            >
-              <span className="work-main">
-                <span className="work-title">{work.title}</span>
-                <span className="work-summary">{work.summary}</span>
-              </span>
-              <span className="entry-meta"><span>{work.type[work.type.length - 1]}</span>{work.year ? <span>{work.year}</span> : null}</span>
-              <ArrowUpRight className="entry-arrow" size={18} aria-hidden="true" />
-            </Link>
-          ))}
-        </div>
-        {works.length > 1 && limit > 0 ? (
-          <button type="button" className="text-link shuffle-link" onClick={refresh} title="随机推荐另一组作品">
-            <Shuffle size={14} aria-hidden="true" />换一组
-          </button>
-        ) : null}
-      </div>
-      {activeWork ? (
-        <Link href={"/works/" + activeWork.slug} className={"work-preview" + (activeWork.cover?.trim() ? " has-image" : " text-only")} aria-label={"预览作品：" + activeWork.title}>
-          {activeWork.cover?.trim() ? (
-            <img key={activeWork.slug} src={activeWork.cover.trim()} alt="" loading="lazy" />
+    <div className="work-collage">
+      {selected.map((work, index) => (
+        <Link
+          key={work.slug}
+          href={"/works/" + work.slug}
+          className={`collage-card collage-slot-${index}${work.cover?.trim() ? " has-cover" : " text-fragment"}`}
+        >
+          {work.cover?.trim() ? (
+            <span className="collage-image"><img src={work.cover.trim()} alt="" loading={index > 1 ? "lazy" : undefined} /></span>
           ) : (
-            <div key={activeWork.slug} className="text-preview">
-              <span className="meta">{activeWork.type.join(" / ")}</span>
-              <p>{activeWork.summary}</p>
-            </div>
+            <span className="fragment-paper">
+              <span className="meta">{work.type.join(" / ")}</span>
+              <span className="fragment-title">{work.title}</span>
+              <span className="fragment-text">{work.excerpt}</span>
+            </span>
           )}
-          <span className="preview-caption"><strong>{activeWork.title}</strong><ArrowUpRight size={16} aria-hidden="true" /></span>
+          <span className="collage-caption">
+            <span>
+              <span className="collage-title">{work.title}</span>
+              <span className="meta">{[work.type.join(" / "), work.year].filter(Boolean).join(" · ")}</span>
+            </span>
+            <ArrowUpRight size={19} aria-hidden="true" />
+          </span>
         </Link>
-      ) : null}
+      ))}
     </div>
   );
 }
