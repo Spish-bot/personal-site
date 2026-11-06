@@ -3,7 +3,6 @@ import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { AlbumCanvas } from "@/components/AlbumCanvas";
 import { ContentModules } from "@/components/ContentModules";
-import { ReadingFooter } from "@/components/ReadingFooter";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { getPublishedWorks, getWork } from "@/lib/content";
 
@@ -22,11 +21,12 @@ export default function WorkDetailPage({ params }: Props) {
   const work = getWork(params.slug);
   if (!work) notFound();
   const isPhotographic = Boolean(work.album) || work.modules.some((module) => module.kind === "yearGallery");
+  const isPoem = work.modules.some((module) => module.kind === "poem");
   return (
     <main id="main-content" className="site-width detail-page">
       <ReadingProgress />
       <Link href="/works" className="text-link back-link"><ArrowLeft size={14} aria-hidden="true" />Works</Link>
-      <article className={"reading-article" + (isPhotographic ? " wide-article" : "") + (work.slug === "untitled-wind-poem" ? " short-work" : "")}>
+      <article className={"reading-article" + (isPhotographic ? " wide-article" : "") + (isPoem ? " poem-work" : "")}>
         <header className="article-heading">
           <div className="article-meta meta">
             {work.year ? <span>{work.year}</span> : null}
@@ -40,7 +40,6 @@ export default function WorkDetailPage({ params }: Props) {
         </header>
         {work.album ? <AlbumCanvas album={work.album} workSlug={work.slug} /> : null}
         <ContentModules modules={work.modules} />
-        <ReadingFooter entries={getPublishedWorks()} slug={work.slug} section="works" />
       </article>
     </main>
   );

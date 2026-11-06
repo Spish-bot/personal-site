@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { about } from "@/lib/content";
 
@@ -6,7 +5,6 @@ export function SiteFooter() {
   return (
     <footer className="site-footer site-width">
       <div className="footer-identity">
-        <Link href="/" className="footer-name">{about.name}</Link>
         <p>{about.description}</p>
       </div>
       <div className="footer-meta">
